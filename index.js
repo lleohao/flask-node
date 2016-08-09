@@ -1,1 +1,1 @@
-module.exports = require("./src/init");
+module.exports = require("./lib/init");
