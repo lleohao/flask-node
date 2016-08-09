@@ -1,1 +1,1 @@
-var createServr
+module.exports = require("./src/init");

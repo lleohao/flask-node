@@ -1,5 +1,6 @@
 /// <reference path="../typings/index.d.ts" />
-const server = require('../server/createServer');
+const Flask = require('../index');
 
-console.log('Server in runing on port: 8000');
-server.listen(8000);
+var app = new Flask(__dirname);
+
+console.log(app);
