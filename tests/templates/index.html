@@ -1,6 +1,19 @@
-<h1>{{ pagename|title }}</h1>
-<ul>
-{% for author in authors %}
-    <li{% if loop.first %} class="first"{% endif %}>{{ author }}</li>
-{% endfor %}
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+    {% if username %}
+    <h1>Hi, {{ username }}.</h1>
+    {% else %}
+    <h1>Hi, vistior.</h1>
+    <form method="POST">
+        <label for="username">your name:</label>
+        <input type="text" placeholder="input your name" name="username" id="username">
+        <input type="submit">
+    </form>
+    {% endif %}
+</body>
+</html>

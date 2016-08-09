@@ -5,5 +5,3 @@ let output = template({
     pagename: 'awesome people',
     authors: ['Paul', 'Jim', 'Jane']
 });
-
-console.log(output)
