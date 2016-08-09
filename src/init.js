@@ -6,18 +6,16 @@ const staticServer = require("./static");
 const global = require("./global");
 const router = require("./router");
 
+
 function Flask(rootPath, config) {
     this.rootPath = rootPath;
-    this.server = createServer();
-    this.router = router;
-    config = config || {};
-    this.filePath = {
-        static: config.static || global.filePath.static,
-        templates: config.templates || global.filePath.templates
-    }
+    this.config = {};
+    Object.assign(this.config, global.filePath, config);
 }
 
-let createServer = function () {
+Flask.prototype.createServer = function () {
+    let rootPath = this.rootPath;
+    let config = this.config;
     let server = http.createServer((request, response) => {
         // 设置常用响应
         tools.setHeaders({
@@ -41,7 +39,7 @@ let createServer = function () {
         }
 
         if (tools.staticMatch.test(datagram.pathname)) {
-            staticServer(datagram, response);
+            staticServer(datagram, response, this);
         } else {
             request.on("data", (chunk) => {
                 _data.push(chunk);
@@ -51,9 +49,13 @@ let createServer = function () {
             })
         }
     });
-
     return server;
 }
 
+Flask.prototype.run = function (port = 5000, hostname = "localhost") {
+    console.log("Server is runing on http://" + hostname + ":" + port);
+    let server = this.createServer();
+    server.listen(port, hostname);
+}
 
 module.exports = Flask;

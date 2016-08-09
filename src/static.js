@@ -2,7 +2,6 @@
 const fs = require("fs");
 const path = require("path");
 const tools = require("./help/tools");
-const global = require("./global");
 
 let staticServer = function (datagram, response) {
     let pathname = datagram.pathname;

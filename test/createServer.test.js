@@ -2,5 +2,4 @@
 const Flask = require('../index');
 
 var app = new Flask(__dirname);
-
-console.log(app);
+app.run();
