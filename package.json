@@ -1,6 +1,6 @@
 {
-  "name": "node-flask",
-  "version": "0.0.1",
+  "name": "flask-node",
+  "version": "0.1.0",
   "description": "similar to python Flask web-framework",
   "main": "index.js",
   "scripts": {
