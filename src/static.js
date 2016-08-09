@@ -4,12 +4,16 @@ const path = require("path");
 const tools = require("./help/tools");
 const global = require("./global");
 
-module.exports = function (rootPath, config) {
+/**
+ * 处理静态文件
+ */
+module.exports = function (rootPath, config, debug) {
     let staticServer = function (datagram, response) {
         let pathname = datagram.pathname;
         let headers = datagram.headers;
         let realPath = path.join(rootPath, config.static, pathname);
 
+        if(debug) console.log("StaticServer: " + realPath);
         fs.exists(realPath, function (exists) {
             if (!exists) {
                 // 文件不存在
