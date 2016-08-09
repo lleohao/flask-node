@@ -1,0 +1,30 @@
+{
+  "name": "node-flask",
+  "version": "0.0.1",
+  "description": "similar to python Flask web-framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lleobox/nodeServer.git"
+  },
+  "keywords": [
+    "flask",
+    "webserver",
+    "web-framework"
+  ],
+  "author": "lleohao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lleobox/nodeServer/issues"
+  },
+  "homepage": "https://github.com/lleobox/nodeServer#readme",
+  "dependencies": {
+    "swig": "^1.4.2"
+  },
+  "devDependencies": {
+    "typings": "^1.3.2"
+  }
+}
