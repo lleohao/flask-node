@@ -2,7 +2,7 @@
 const http = require("http");
 const url = require("url");
 const tools = require("./help/tools");
-const staticServer = require("./static");
+const createStaticServer = require("./static");
 const global = require("./global");
 const router = require("./router");
 
@@ -13,9 +13,10 @@ function Flask(rootPath, config) {
     Object.assign(this.config, global.filePath, config);
 }
 
-Flask.prototype.createServer = function () {
+Flask.prototype.__createServer = function () {
     let rootPath = this.rootPath;
     let config = this.config;
+    let staticServer = createStaticServer(rootPath, config);
     let server = http.createServer((request, response) => {
         // 设置常用响应
         tools.setHeaders({
@@ -54,7 +55,7 @@ Flask.prototype.createServer = function () {
 
 Flask.prototype.run = function (port = 5000, hostname = "localhost") {
     console.log("Server is runing on http://" + hostname + ":" + port);
-    let server = this.createServer();
+    let server = this.__createServer();
     server.listen(port, hostname);
 }
 

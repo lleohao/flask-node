@@ -1,5 +1,5 @@
 module.exports = {
-    Expries: {
+    Expires: {
         fileMatch: /^(gif|png|jpg|js|css)$/ig,
         maxAge: 86400
     },
