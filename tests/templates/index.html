@@ -3,17 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
+    <style>
+        label {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    {% if username %}
-    <h1>Hi, {{ username }}.</h1>
-    {% else %}
-    <h1>Hi, vistior.</h1>
-    <form method="POST">
-        <label for="username">your name:</label>
-        <input type="text" placeholder="input your name" name="username" id="username">
-        <input type="submit">
+    <form method="get">
+        <label for="username">用户名：</label>
+        <input type="text" name="username">
+        <label for="password">密码</label>
+        <input type="password" name="password">
+        <label for="book"></label>
+        <input type="checkbox" name="book" value="book1">book1
+        <input type="checkbox" name="book" value="book2">book2
+        <label for="sex">性别</label>
+        <input type="radio" name="sex" value="man">男
+        <input type="radio" name="sex" value="women">女
+        <label for="like">爱好</label>
+        <select name="like" id="like">
+            <option value="car">car</option>
+            <option value="bike">bike</option>
+        </select>
+        <label for="icon">用户头像</label>
+        <input type="file" name="icon">
+        <input type="submit" value="提交">
     </form>
-    {% endif %}
 </body>
 </html>
