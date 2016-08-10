@@ -1,0 +1,24 @@
+body {
+    font-family: "microsoft yahei", "Times New Roman", "宋体", Times, serif;
+}
+
+.uploadarea {
+    margin-top: 30px;
+}
+
+#upload {
+    height: 300px;
+    border: 2px #ccc dotted;
+    text-align: center;
+}
+#upload p {
+    line-height: 300px;
+    -webkit-user-select: none;
+    user-select: none;
+    color: #888;
+    cursor: default;
+}
+
+#upload.active {
+    box-shadow: 4px 5px 8px #ccc, -4px -5px 8px #ccc;
+}

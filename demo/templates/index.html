@@ -1,15 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>拖拽上传demo</title>
     <link rel="stylesheet" href="{{ 'style.css'|static }}">
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
+
 <body>
-    <h1>拖拽上传</h1>
+    <div class="container">
+        <div class="panel panel-default uploadarea">
+            <div class="panel-heading">
+                <h2>拖拽上传demo</h2>
+            </div>
+            <div class="panel-body">
+                <div id="upload">
+                    <p>请将文件拖放至此区域</p>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="preview" style="display: none;">
+                    <p>文件名：<span id="filename"></span></p>
+                    <p>文件大小：<span id="filesize"></span></p>
+                    <p>文件修改时间：<span id="filemodify"></span></p>
+                </div>
+                <button class="btn btn-default" id="btn-upload">上传</button>
+            </div>
+        </div>
+    </div>
     <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
     <script src="{{ 'custom.js'|static }}"></script>
 </body>
+
 </html>
