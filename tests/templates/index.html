@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ title }}</title>
+    <title>demo</title>
     <style>
         label {
             display: block;
@@ -10,7 +10,8 @@
     </style>
 </head>
 <body>
-    <form method="post" enctype="">
+    <img src={{ "success.png"|static }} alt="success">
+    <form method="post" enctype="application/x-www-form-urlencoded">
         <label for="username">用户名：</label>
         <input type="text" name="username">
         <label for="password">密码</label>
