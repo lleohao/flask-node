@@ -1,7 +1,5 @@
 /// <reference path="../../typings/index.d.ts" />
 $(function () {
-    // 取消浏览器默认事件
-
     $(document).on({
         dragleave: function (e) {
             e.preventDefault();
@@ -58,8 +56,13 @@ $(function () {
             req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
             var fd = new FormData();
             fd.append("uploadFile", fileList[0]);
-
+            
             req.send(fd);
+            req.onreadystatechange = function() {
+                if (req.readyState == 4 &&  req.status == 200) {
+                    window.location = "./view";
+                }
+            }
         })
     });
 
