@@ -1,5 +1,5 @@
-/// <reference path="../typings/index.d.ts" />
-const Flask = require('../index');
+/// <reference path="../../typings/index.d.ts" />
+const Flask = require('../../index');
 
 let app = new Flask(__dirname);
 let mainRouter = app.createRouter();
