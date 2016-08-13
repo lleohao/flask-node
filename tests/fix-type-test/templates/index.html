@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>fix-type</title>
+    <style>
+        label {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <img src={{ "img/success.png"|static }} alt="success">
+    <form method="post" enctype="multipart/form-data">
+        <label for="username">文本测试</label>
+        <input type="text" name="username">
+        <label for="icon">文件测试</label>
+        <input type="file" name="files" multiple>
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>
