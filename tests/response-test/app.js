@@ -10,7 +10,7 @@ mainRouter.add('/', (req, res) => {
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(render('index.html', {
         message: 'hello world'
-    }))
-})
+    }));
+});
 
 app.run({debug: true});
