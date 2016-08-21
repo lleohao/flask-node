@@ -1,22 +1,25 @@
 /// <reference path="../typings/index.d.ts" />
-const Flask = require("../");
+const Flask = require('../lib').Flask;
+const Router = require('../lib').Router;
 const fs = require('fs');
 const path = require('path');
 
 let app = new Flask(__dirname);
-let mainRoute = app.createRouter();
-let render = app.createRender();
+let mainRoute = new Router();
 
 mainRoute.add("/", function (req, res) {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end(render('index.html'));
+    res.$res.writeHead(200, { 'Content-Type': 'text/html' });
+    // res.end(render('index.html'));
+    res.$res.end("ok");
 });
 
 mainRoute.add("/view", function (req, res) {
     res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end(render('view.html'));
-})
+    // res.end(render('view.html'));
+    res.end("ok1");
+});
 
+/*
 mainRoute.add("/upload", ["POST"], function (req, res) {
     let _uploadFile = req.form.files.uploadFile;
     let _extname = _uploadFile.name.split(".")[1];
@@ -49,6 +52,6 @@ mainRoute.add("/upload", ["POST"], function (req, res) {
             })
         }
     })
-});
+});*/
 
-app.run();
+app.run({debug: true});
