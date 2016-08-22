@@ -58,11 +58,6 @@ $(function () {
             fd.append("uploadFile", fileList[0]);
             
             req.send(fd);
-            req.onreadystatechange = function() {
-                if (req.readyState == 4 &&  req.status == 200) {
-                    window.location = "./view";
-                }
-            }
         })
     });
 

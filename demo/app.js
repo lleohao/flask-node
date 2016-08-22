@@ -8,19 +8,19 @@ let app = new Flask(__dirname);
 let mainRoute = new Router();
 
 mainRoute.add("/", function (req, res) {
-    res.$res.writeHead(200, { 'Content-Type': 'text/html' });
-    // response.end(render('index.html'));
-    res.$res.end("ok");
+    res.render('index.html');
 });
+
+mainRoute.add("/baidu", function(req, res) {
+    res.redirect('http://www.baidu.com');
+})
 
 mainRoute.add("/view", function (req, res) {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    // response.end(render('view.html'));
-    res.end("ok1");
+    res.render('view.html');
 });
 
-/*
-mainRoute.add("/upload", ["POST"], function (req, response) {
+
+mainRoute.add("/upload", ["POST"], function (req, res) {
     let _uploadFile = req.form.files.uploadFile;
     let _extname = _uploadFile.name.split(".")[1];
     let _tmpPath = _uploadFile.path;
@@ -46,12 +46,11 @@ mainRoute.add("/upload", ["POST"], function (req, response) {
                     response.writeHead(500, { 'Content-Type': 'text/plain' });
                     response.end("The server error");
                 } else {
-                    response.writeHead(200, { 'Content-Type': 'text/plain' });
-                    response.end("true");
+                    res.redirect('/view');
                 }
             })
         }
     })
-});*/
+});
 
-app.run({debug: true});
+app.run();
