@@ -68,6 +68,20 @@ describe('Route test', function () {
             route._regex_str.should.be.eql('^/post/(\\w+)/operate/(\\d+)/(\\w+)$');
             route._variable.should.be.eql(['category', 'id', 'action']);
         });
+
+        it('error test', function () {
+            should.throws(function () {
+                new Route('/post/<id>/<id>', ['get'], 'index');
+            });
+
+            should.throws(function () {
+                new Route('/post/<id', ['get'], 'index');
+            });
+
+            should.throws(function () {
+                new Route('/post/<ddd:dd>', ['get'], 'index');
+            });
+        })
     });
 
     describe('match test', function () {
