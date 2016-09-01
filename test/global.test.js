@@ -1,17 +1,17 @@
 /**
  * Created by hzzhouhao1 on 2016/8/21.
  */
-require('should');
+const should = require('should');
+const path = require('path');
 const global = require('../lib/global');
-const rootPath = __dirname;
 
-global.configs.rootPath = rootPath;
+global.configs.rootPath = __dirname;
 global.setConfigs({});
 
 describe('global.js test', function () {
     describe('不传入设置项', function () {
         it('返回默认配置信息', function () {
-            global.configs.should.be.an.object;
+            global.configs.should.be.an.Object();
             global.configs.staticPath.should.be.equal('E:\\nodeServer\\test\\static');
         })
     });

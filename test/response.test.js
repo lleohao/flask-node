@@ -79,7 +79,7 @@ describe('response.js test', function () {
         });
 
         it('render_template success', function () {
-            res.render_template('<h1>{{ name }}</h1>', {name: 'lleohao'});
+            res.render('<h1>{{ name }}</h1>', {name: 'lleohao'});
 
             should(res.$res.code).be.equal(200);
             should(res.$res.headers).have.property('Content-Type');
