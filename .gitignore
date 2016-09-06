@@ -41,3 +41,4 @@ jspm_packages
 typings
 **/tmp
 test/test
+mochawesome-reports
