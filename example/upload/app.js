@@ -19,7 +19,6 @@ mainRoute.add("/view", function (req, res) {
     res.render('view.html');
 });
 
-
 mainRoute.add("/upload", ["POST"], function (req, res) {
     let _uploadFile = req.form.files.uploadFile;
     let _extname = _uploadFile.name.split(".")[1];

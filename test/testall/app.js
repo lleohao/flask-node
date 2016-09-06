@@ -9,12 +9,12 @@ const Router = require('../../lib').Router;
 let app = new Flask(__dirname);
 let router = new Router();
 
-router.add('/', function index(req, res) {
+router.add('/', function (req, res) {
     res.str('hello world');
 });
 
-router.add('/user/<username>', function user(req, res) {
-    res.str('hello ' + result.username);
+router.add('/user/<username>', function (req, res, params) {
+    res.str('hello ' + params.username);
 });
 
 app.run();
