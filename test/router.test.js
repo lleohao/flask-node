@@ -53,8 +53,7 @@ describe('Router test', function () {
 
         it('static router /', function (done) {
             testTools();
-            router.add('/', ['get'], function (req, res) {
-                console.log('req: ', req);
+            router.add('/', ['get'], function index(req, res) {
                 req.pathname.should.be.eql('/');
                 done();
             });
@@ -64,7 +63,7 @@ describe('Router test', function () {
 
         it('static router /post', function (done) {
             testTools();
-            router.add('/post', ['get'], function (req, res) {
+            router.add('/post', ['get'], function post(req, res) {
                 req.pathname.should.be.eql('/post');
                 done();
             });
@@ -74,7 +73,7 @@ describe('Router test', function () {
 
         it('dynamic router str type', function (done) {
             testTools();
-            router.add('/post/<str:title>', function (req, res, params) {
+            router.add('/post/<str:title>', function viewPost(req, res, params) {
                 params.title.should.be.eql('demo');
                 done();
             });
@@ -84,7 +83,7 @@ describe('Router test', function () {
 
         it('dynamic router path type', function (done) {
             testTools();
-            router.add('/post/<path:path>', function (req, res, params) {
+            router.add('/post/<path:path>', function pathPost(req, res, params) {
                 params.path.should.be.eql('demo/dede');
                 done();
             });
