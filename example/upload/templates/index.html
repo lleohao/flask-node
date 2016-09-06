@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>drag upload demo</title>
+    <title>upload demo</title>
     <link rel="stylesheet" href="{{ 'style.css'|static }}">
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
@@ -15,12 +15,11 @@
                 <h2>upload demo</h2>
             </div>
             <div class="panel-body">
-                <form action="/upload" enctype="multipart/form-data">
+                <form action="/upload" enctype="multipart/form-data" method="post">
                     <label for="img">选择图片文件</label><input id="img" type="file" name="img">
+                    <br>
+                    <button type="submit" class="btn btn-default" id="btn-upload">upload</button>
                 </form>
-            </div>
-            <div class="panel-footer">
-                <button type="submit" class="btn btn-default" id="btn-upload">upload</button>
             </div>
         </div>
     </div>
