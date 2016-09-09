@@ -8,8 +8,8 @@ let app = new Flask(__dirname, {static: 'asset'});
 let mainRoute = new Router();
 
 mainRoute.add("/", function index(req, res) {
-    // res.render('index.html');
-    res.str('Hello world');
+    res.render('index.html');
+    // res.str('Hello world');
 });
 
 mainRoute.add("/view", function viewImg(req, res) {
