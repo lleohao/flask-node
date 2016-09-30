@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "install": "npm insatll",
     "coverage": "istanbul cover .\\node_modules\\mocha\\bin\\_mocha",
     "report": "mocha --reporter mochawesome"
   },
