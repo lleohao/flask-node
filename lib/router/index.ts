@@ -26,6 +26,21 @@ function errorHandle(req: any, res: any) {
 
 }
 
+function _insertSort(array: Route[]) {
+    let length = array.length,
+        j, temp;
+
+    for (let i = 1; i < length; i++) {
+        j = i;
+        temp = array[i];
+
+        while (j > 0 && array[j - 1].weight > temp.weight) {
+            array[j] = array[j - 1];
+            j--;
+        }
+        array[j] = temp;
+    }
+}
 
 export class Router {
     prefix: string;
@@ -34,7 +49,7 @@ export class Router {
         this.prefix = prefix;
     }
 
-    add(path: string, methods: string[] | Function, handle: Function | undefined) {
+    add(path: string, methods: string[] | Function, handle?: Function | undefined) {
         if (handle === undefined) {
             handle = <Function>methods;
             methods = ['get'];
@@ -46,26 +61,6 @@ export class Router {
         let route = new Route(path, <string[]>methods, name);
         urlMap.push(route);
         endpoint[name] = handle;
-        this.update();
-    }
-
-    update() {
-        function _insertSort(array: Route[]) {
-            let length = array.length,
-                j, temp;
-
-            for (let i = 1; i < length; i++) {
-                j = i;
-                temp = array[i];
-
-                while (j > 0 && array[j - 1].weight > temp.weight) {
-                    array[j] = array[j - 1];
-                    j--;
-                }
-                array[j] = temp;
-            }
-        }
-
         _insertSort(urlMap)
     }
 }
