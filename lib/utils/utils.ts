@@ -1,8 +1,5 @@
-const path = require('path');
-const colors = require('colors');
-const configs = require('./configs');
-
-colors.setTheme(configs.colorTheme);
+import { normalize, join } from 'path';
+import { configs } from './configs';
 
 const _setFlaskConfig = function (_configs) {
     let defaultConfig = {
@@ -14,10 +11,10 @@ const _setFlaskConfig = function (_configs) {
 
     defaultConfig = Object.assign(defaultConfig, _configs);
 
-    configs.Flask.static = path.normalize(defaultConfig.static);
-    configs.Flask.staticPath = path.join(root, path.normalize(defaultConfig.static));
-    configs.Flask.templates = path.join(root, path.normalize(defaultConfig.templates));
-    configs.Flask.temp = path.join(root, path.normalize(defaultConfig.temp));
+    configs.Flask.static = normalize(defaultConfig.static);
+    configs.Flask.staticPath = join(root, normalize(defaultConfig.static));
+    configs.Flask.templates = join(root, normalize(defaultConfig.templates));
+    configs.Flask.temp = join(root, normalize(defaultConfig.temp));
 };
 
 const _setStaticServer = function (_configs) {
@@ -48,20 +45,20 @@ const _setFormOptions = function (_configs) {
         if (configs.FormOptions.uploadDir === undefined) {
             throw TypeError('formOptions.uploadDir is undefined, it must be a string');
         }
-        configs.FormOptions.uploadDir = path.join(configs.Flask.root, path.normalize(configs.FormOptions.uploadDir));
+        configs.FormOptions.uploadDir = join(configs.Flask.root, normalize(configs.FormOptions.uploadDir));
     } else {
         configs.FormOptions.uploadDir = configs.Flask.temp;
     }
 };
 
-const setConfigs = function (_configs) {
+export const setConfigs = function (_configs) {
     _setFlaskConfig(_configs);
 
     if (_configs.StaticServer) _setStaticServer(_configs.StaticServer);
     if (_configs.FormOptions) _setFormOptions(_configs.FormOptions);
 };
 
-const setRunTime = function (options) {
+export const setRunTime = function (options) {
     let defaultConfig = {
         port: 5050,
         hostname: '127.0.0.1',
@@ -70,7 +67,3 @@ const setRunTime = function (options) {
 
     configs.RunTime = Object.assign(defaultConfig, options);
 };
-
-module.exports.colors = colors;
-module.exports.setConfigs = setConfigs;
-module.exports.setRunTime = setRunTime;
