@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "sourceMap": true,
+        "removeComments": true,
+        "declaration": true,
+        "declarationDir": "typings"
+    },
+    "exclude": [
+        "node_modules",
+        "typings",
+        "tests"
+    ]
+}
