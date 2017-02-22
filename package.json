@@ -42,6 +42,7 @@
     "swig": "^1.4.2"
   },
   "devDependencies": {
+    "@types/formidable": "^1.0.29",
     "@types/mocha": "^2.2.39",
     "@types/node": "^7.0.5",
     "@types/should": "^8.1.30",
