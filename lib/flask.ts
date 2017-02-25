@@ -8,7 +8,6 @@ export class Flask {
         configs.setConfigs(rootPath, options);
     }
 
-
     private createServer() {
         let runTimeOptions = configs.runTimeOptions;
 
