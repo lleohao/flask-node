@@ -3,6 +3,7 @@ import { normalize, join } from 'path';
 export interface FlaskOptions {
     staticFolder?: string;
     templateFolder?: string;
+    statucOptins?: StaticServerOptions
 }
 
 export interface FlaskRuntimeOptions {
@@ -11,15 +12,18 @@ export interface FlaskRuntimeOptions {
     hostname?: string;
 }
 
+export interface StaticServerOptions {
+    cache?: number | boolean
+    gzip?: boolean | RegExp
+}
+
 export class Configs {
     flaskOptions: {
         rootPath: string
         staticPath: string
         templatesPath: string
     };
-    staticServerOptions: {
-        cacheTime: number
-    };
+    staticServerOptions: StaticServerOptions;
     formOptions: {
         autoSave: boolean
         uploadPath: string
@@ -37,7 +41,8 @@ export class Configs {
             templatesPath: ''
         };
         this.staticServerOptions = {
-            cacheTime: 60 * 60
+            cache: 3600,
+            gzip: true
         };
         this.formOptions = {
             autoSave: false,
