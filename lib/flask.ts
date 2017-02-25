@@ -1,5 +1,5 @@
 import { createServer } from 'http';
-import { Configs, FlaskOptions, FlaskRuntimeOptions } from './configs';
+import { Configs, FlaskOptions, RunTimeOptions } from './configs';
 
 export const configs = new Configs();
 
@@ -26,7 +26,7 @@ export class Flask {
         });
     }
 
-    run(options: FlaskRuntimeOptions = {}) {
+    run(options: RunTimeOptions = {}) {
         configs.setRunTime(options);
         let runTimeOptions = configs.runTimeOptions;
 
