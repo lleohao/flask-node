@@ -1,7 +1,0 @@
-
-
-class Static {
-    constructor() {
-
-    }
-}
