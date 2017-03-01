@@ -1,11 +1,12 @@
 import { Route } from './route';
+import { Request } from '../request';
 
 
 export let urlMap: Route[] = [];
 let endpoint: any = {};
 
 // FIXME: 等待修复req res 模块
-export function handleRouter(req: any, res: any) {
+export function handleRouter(req: Request, res: any) {
     let i = 0,
         len = urlMap.length;
     for (; i < len; i++) {
