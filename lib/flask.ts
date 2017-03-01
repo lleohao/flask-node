@@ -1,4 +1,6 @@
 import { createServer } from 'http';
+
+import { Request } from './request';
 import { Configs, FlaskOptions, RunTimeOptions } from './configs';
 
 export const configs = new Configs();
@@ -11,18 +13,20 @@ export class Flask {
     private createServer() {
         let runTimeOptions = configs.runTimeOptions;
 
-        return createServer((req, res) => {
-            res.setHeader('server', 'node/flask');
-            if (runTimeOptions.debug)
-                console.log(`[${new Date()}] path: ${req.url} method: ${req.method}`);
+        return createServer((request, res) => {
+            let req = new Request(request);
 
-            if (req.method === 'OPTIONS') {
+            res.setHeader('server', 'node/flask');
+
+            if (request.method === 'OPTIONS') {
                 res.writeHead(200);
                 res.end()
             }
 
+            res.end(JSON.stringify(req.cookies('serviceName')));
 
-            res.end('ok');
+            if (runTimeOptions.debug)
+                console.log(`[${new Date()}] path: ${request.url} method: ${request.method}`);
         });
     }
 

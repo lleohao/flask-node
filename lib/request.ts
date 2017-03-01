@@ -1,19 +1,23 @@
 import { IncomingMessage } from 'http';
-import * as parseurl from 'parseurl';
+import { parse as parseUrl, Url } from 'url';
+import { parse } from 'querystring';
+
+export interface FileObject {
+
+}
 
 export class Request {
     req: IncomingMessage;
-    method: string;
     pathname: string;
+    parser: Url;
 
     constructor(req: IncomingMessage) {
-        let parser = parseurl(req);
+        let parser = this.parser = parseUrl(req.url);
 
         this.req = req;
-        this.method = req.method;
         this.pathname = parser.pathname;
     }
-    
+
     /**
      * return request headers
      * 
@@ -22,7 +26,7 @@ export class Request {
      * 
      * @memberOf Request
      */
-    headers(name: string) {
+    headers(name?: string): Object | string {
         let lc = name.toLowerCase();
         let headers = this.req.headers;
 
@@ -32,6 +36,26 @@ export class Request {
                 return headers.referrer || headers.referer;
             default:
                 return headers[lc]
+        }
+    }
+
+    /**
+     * get cookies
+     * 
+     * @param {string} name 
+     * 
+     * @memberOf Request
+     */
+    cookies(name?: string): Object | string {
+        let cookieStr = <string>this.headers('cookie') || '';
+        cookieStr = cookieStr.split('; ').join('&');
+
+        let cookies = parse(cookieStr);
+
+        if (!name) {
+            return cookies;
+        } else {
+            return cookies[name] || null;
         }
     }
 
@@ -46,6 +70,11 @@ export class Request {
 
     }
 
+    files(name: string): FileObject {
+        let file: FileObject;
+        return file;
+    }
+
     /**
      * return querystring
      * 
@@ -53,8 +82,14 @@ export class Request {
      * 
      * @memberOf Request
      */
-    args(name: string) {
+    args(name?: string): Object | string {
+        let args = parse(this.parser.query);
 
+        if (!name) {
+            return args;
+        } else {
+            return args[name] || null;
+        }
     }
 
     /**
@@ -67,22 +102,4 @@ export class Request {
     values(name: string) {
 
     }
-
-    files() {
-        
-    }
-
-
-    /**
-     * get cookies
-     * 
-     * @param {string} name 
-     * 
-     * @memberOf Request
-     */
-    cookies(name: string) {
-
-    }
-
-
 }
