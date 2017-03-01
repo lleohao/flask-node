@@ -1,4 +1,4 @@
-import { normalize, join } from 'path';
+import { join, resolve, normalize } from 'path';
 
 /**
  * Flask app options
@@ -14,6 +14,13 @@ export interface FlaskOptions {
      * @memberOf FlaskOptions
      */
     staticFolder?: string
+    /**
+     * static path
+     * 
+     * @type {string}
+     * @memberOf FlaskOptions
+     */
+    staticUrlPath?: string
     /**
      * template file folder
      * 
@@ -90,26 +97,28 @@ export interface RunTimeOptions {
 export class Configs {
     flaskOptions: {
         rootPath: string
-        staticPath: string
         templatesPath: string
+        staticRootPath: string
+        staticUrlPath: string
     };
     staticServerOptions: {
-        rootPath: string
         gzip: boolean | RegExp
         cache: number | boolean
+        headers: Object
     };
     runTimeOptions: RunTimeOptions;
 
     constructor() {
         this.flaskOptions = {
             rootPath: '',
-            staticPath: '',
+            staticUrlPath: '',
+            staticRootPath: '',
             templatesPath: ''
         };
         this.staticServerOptions = {
             cache: 3600,
             gzip: true,
-            rootPath: ''
+            headers: {}
         };
         this.runTimeOptions = {
             debug: false,
@@ -119,20 +128,19 @@ export class Configs {
     }
 
     setConfigs(rootPath, options: FlaskOptions) {
-        let {staticFolder, templateFolder} = Object.assign({
-            staticFolder: options.staticFolder,
-            templateFolder: options.templateFolder
-        }, {
-            staticFolder: 'static',
-            templateFolder: 'templates'
-        });
+        let staticFolder = options.staticFolder || 'static';
+        let staticUrlPath = options.staticUrlPath || 'static';
+        let templateFolder = options.templateFolder || 'templates';
+
+        if (normalize(staticUrlPath).indexOf('.') !== -1) {
+            throw new RangeError(`static url path is over root path`);
+        }
 
         let flaskOptions = this.flaskOptions;
         flaskOptions.rootPath = rootPath;
-        flaskOptions.staticPath = join(rootPath, normalize(staticFolder));
-        flaskOptions.templatesPath = join(rootPath, normalize(templateFolder));
-
-        this.staticServerOptions.rootPath = flaskOptions.staticPath;
+        flaskOptions.staticUrlPath = normalize(staticUrlPath).replace('\\', '/');
+        flaskOptions.templatesPath = resolve(join(rootPath, templateFolder));
+        flaskOptions.staticRootPath = resolve(join(rootPath, staticFolder));
 
         if (options.staticOptions) {
             this.staticServerOptions = Object.assign(this.staticServerOptions, options.staticOptions)

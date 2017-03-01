@@ -2,8 +2,9 @@ import { stat, createReadStream } from 'fs';
 import { STATUS_CODES, ServerResponse } from 'http';
 import { join, resolve } from 'path';
 import { Request } from './request';
-import { StaticServerOptions } from './configs';
 import * as mime from 'mime';
+
+import { configs } from './flask';
 
 export class Sever {
     root: string;
@@ -15,10 +16,15 @@ export class Sever {
     cache: number | boolean;
     defaultHeaders: Object;
 
-    constructor(root: string, options: StaticServerOptions, debug = false) {
-        this.root = root;
-        this.options = options;
+    staticUrlPathLen: number;
+
+    constructor() {
+        this.root = configs.flaskOptions.staticRootPath;
+        this.options = configs.staticServerOptions;
+
+        this.staticUrlPathLen = configs.flaskOptions.staticUrlPath.length + 2;
         this.defaultHeaders = {};
+
 
         if (this.options.cache === false) {
             this.cache = false;
@@ -26,7 +32,7 @@ export class Sever {
             this.cache = this.options.cache;
         }
 
-        if (!debug && this.cache !== false) {
+        if (!configs.runTimeOptions.debug && this.cache !== false) {
             this.defaultHeaders['Cache-control'] = `max-age=${this.cache}`;
         } else {
             this.defaultHeaders['Cache-control'] = 'no store';
@@ -49,6 +55,7 @@ export class Sever {
     }
 
     private reslove(pathname: string) {
+        pathname = pathname.substr(this.staticUrlPathLen)
         return resolve(join(this.root, pathname));
     }
 
@@ -158,7 +165,7 @@ export class Sever {
         let mtime = Date.parse(stat.mtime),
             headers = {},
             clientETag = req.headers('if-none-match'),
-            clientMTime = Date.parse(req.headers('if-modified-since')),
+            clientMTime = Date.parse(<string>req.headers('if-modified-since')),
             startByte = 0,
             length = stat.size,
             byteRange = this.parseByteRange(req, stat);
@@ -176,42 +183,42 @@ export class Sever {
                 byteRange.valid = false;
                 console.warn('Range request exceeds file boundaries, goes until byte no', byteRange.to, 'against file size of', length, 'bytes');
             }
+        }
 
-            if (!byteRange.valid && req.headers('range')) {
-                console.error(new Error('Range request present but invalid, might serve whole file instead'));
-            }
+        if (!byteRange.valid && req.headers('range')) {
+            console.error(new Error('Range request present but invalid, might serve whole file instead'));
+        }
 
-            headers = Object.assign(this.options.headers, _headers);
+        headers = Object.assign(this.options.headers, _headers);
 
-            headers['Etag'] = JSON.stringify([stat.ino, stat.size, mtime].join('-'));
-            headers['Date'] = new (Date)().toUTCString();
-            headers['Last-Modified'] = new (Date)(stat.mtime).toUTCString();
-            headers['Content-Type'] = contentType;
-            headers['Content-Length'] = length;
+        headers['Etag'] = JSON.stringify([stat.ino, stat.size, mtime].join('-'));
+        headers['Date'] = new (Date)().toUTCString();
+        headers['Last-Modified'] = new (Date)(stat.mtime).toUTCString();
+        headers['Content-Type'] = contentType;
+        headers['Content-Length'] = length;
 
-            if ((clientMTime || clientETag) &&
-                (!clientETag || clientETag === headers['Etag']) &&
-                (!clientMTime || clientMTime >= mtime)) {
-                ['Content-Encoding',
-                    'Content-Language',
-                    'Content-Length',
-                    'Content-Location',
-                    'Content-MD5',
-                    'Content-Range',
-                    'Content-Type',
-                    'Expires',
-                    'Last-Modified'].forEach((entityHeader) => {
-                        delete headers[entityHeader];
-                    });
-                finish(304, headers);
-            } else {
-                res.writeHead(status, headers);
+        if ((clientMTime || clientETag) &&
+            (!clientETag || clientETag === headers['Etag']) &&
+            (!clientMTime || clientMTime >= mtime)) {
+            ['Content-Encoding',
+                'Content-Language',
+                'Content-Length',
+                'Content-Location',
+                'Content-MD5',
+                'Content-Range',
+                'Content-Type',
+                'Expires',
+                'Last-Modified'].forEach((entityHeader) => {
+                    delete headers[entityHeader];
+                });
+            finish(304, headers);
+        } else {
+            res.writeHead(status, headers);
 
-                this.stream(filename, length, startByte, res, (e) => {
-                    if (e) { return finish(500, {}) }
-                    finish(status, headers);
-                })
-            }
+            this.stream(filename, length, startByte, res, (e) => {
+                if (e) { return finish(500, {}) }
+                finish(status, headers);
+            })
         }
     }
 
