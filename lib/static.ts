@@ -1,7 +1,7 @@
 import { stat, createReadStream } from 'fs';
 import { STATUS_CODES, ServerResponse } from 'http';
 import { join, resolve } from 'path';
-import { Request } from './request-ts';
+import { Request } from './request';
 import { StaticServerOptions } from './configs';
 import * as mime from 'mime';
 
