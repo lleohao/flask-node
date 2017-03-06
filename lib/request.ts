@@ -2,20 +2,44 @@ import { IncomingMessage } from 'http';
 import { parse as parseUrl, Url } from 'url';
 import { parse } from 'querystring';
 
-export interface FileObject {
-
-}
+import { IncomingForm, Files, Fields, File } from 'formidable';
 
 export class Request {
     req: IncomingMessage;
     pathname: string;
+    method: string;
     parser: Url;
+    afterParse: Function;
 
-    constructor(req: IncomingMessage) {
+    formParse: IncomingForm;
+    formParseFiles: Files;
+    formParseFields: Fields;
+
+    constructor(req: IncomingMessage, afterParse: Function) {
         let parser = this.parser = parseUrl(req.url);
 
         this.req = req;
+        this.method = req.method.toLowerCase();
         this.pathname = parser.pathname;
+        this.afterParse = afterParse;
+        this.formParse = new IncomingForm();
+    }
+
+    parse() {
+        if (/^post$|^put$/.test(this.method)) {
+            this.formParse.parse(this.req, (err, fields, files) => {
+                if (err) {
+                    // TODO: add error function
+                } else {
+                    this.formParseFiles = files;
+                    this.formParseFields = fields;
+
+                    this.afterParse();
+                }
+            })
+        } else {
+            this.afterParse();
+        }
     }
 
     /**
@@ -67,12 +91,15 @@ export class Request {
      * @memberOf Request
      */
     form(name: string) {
-
+        if (/^post$|^put$/.test(this.method)) {
+            return this.formParseFields[name];
+        } else {
+            return this.args(name);
+        }
     }
 
-    files(name: string): FileObject {
-        let file: FileObject;
-        return file;
+    files(name: string): File {
+        return this.files[name];
     }
 
     /**
@@ -100,6 +127,6 @@ export class Request {
      * @memberOf Request
      */
     values(name: string) {
-
+        return this.form(name) || this.args(name) || null;
     }
 }

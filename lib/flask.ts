@@ -20,7 +20,9 @@ export class Flask {
         let staticServer = new Sever()
 
         return createServer((request, res) => {
-            let req = new Request(request);
+            let req = new Request(request, () => {
+                
+            });
 
             res.setHeader('server', 'node/flask');
 
