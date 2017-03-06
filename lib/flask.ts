@@ -7,12 +7,12 @@ import { Configs, FlaskOptions, RunTimeOptions } from './configs';
 export const configs = new Configs();
 
 export class Flask {
-    staticUrl: string;
+    staticRex: RegExp;
 
     constructor(rootPath: string, options: FlaskOptions = {}) {
         configs.setConfigs(rootPath, options);
 
-        this.staticUrl = '/' + configs.flaskOptions.staticUrlPath + '/'
+        this.staticRex = new RegExp('^\/' + configs.flaskOptions.staticUrlPath + '\/');
     }
 
     private createServer() {
@@ -20,21 +20,21 @@ export class Flask {
         let staticServer = new Sever()
 
         return createServer((request, res) => {
-            let req = new Request(request, () => {
-                
-            });
-
             res.setHeader('server', 'node/flask');
 
-            if (request.method === 'OPTIONS') {
-                res.writeHead(200);
-                res.end()
-            }
 
-            if (req.pathname.indexOf(this.staticUrl) === 0) {
-                staticServer.serve(req, res);
+            if (request.method === 'OPTIONS') {
+                // TODO: 优化options请求
             } else {
-                res.end(JSON.stringify(req.cookies('serviceName')));
+                let req = new Request(request);
+
+                if (this.staticRex.test(req.pathname)) {
+                    staticServer.serve(req, res);
+                } else {
+                    req.parse(() => {
+
+                    })
+                }
             }
 
             if (runTimeOptions.debug)

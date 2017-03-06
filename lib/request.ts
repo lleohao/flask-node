@@ -5,27 +5,25 @@ import { parse } from 'querystring';
 import { IncomingForm, Files, Fields, File } from 'formidable';
 
 export class Request {
-    req: IncomingMessage;
+    private req: IncomingMessage;
     pathname: string;
     method: string;
-    parser: Url;
-    afterParse: Function;
+    private parser: Url;
 
-    formParse: IncomingForm;
-    formParseFiles: Files;
-    formParseFields: Fields;
+    private formParse: IncomingForm;
+    private formParseFiles: Files;
+    private formParseFields: Fields;
 
-    constructor(req: IncomingMessage, afterParse: Function) {
+    constructor(req: IncomingMessage) {
         let parser = this.parser = parseUrl(req.url);
 
         this.req = req;
         this.method = req.method.toLowerCase();
         this.pathname = parser.pathname;
-        this.afterParse = afterParse;
         this.formParse = new IncomingForm();
     }
 
-    parse() {
+    parse(parseOk: Function) {
         if (/^post$|^put$/.test(this.method)) {
             this.formParse.parse(this.req, (err, fields, files) => {
                 if (err) {
@@ -34,11 +32,11 @@ export class Request {
                     this.formParseFiles = files;
                     this.formParseFields = fields;
 
-                    this.afterParse();
+                    parseOk();
                 }
             })
         } else {
-            this.afterParse();
+            parseOk();
         }
     }
 
