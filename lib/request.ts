@@ -68,7 +68,7 @@ export class Request {
      * 
      * @memberOf Request
      */
-    cookies(name?: string): Object | string {
+    cookies(name?: string): string | Object {
         let cookieStr = <string>this.headers('cookie') || '';
         cookieStr = cookieStr.split('; ').join('&');
 

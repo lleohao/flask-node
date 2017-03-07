@@ -1,12 +1,13 @@
 import { Route } from './route';
 import { Request } from '../request';
+import { Response } from '../response';
 
 
-export let urlMap: Route[] = [];
-let endpoint: any = {};
+export const urlMap: Route[] = [];
+const endpoint: any = {};
 
 // FIXME: 等待修复req res 模块
-export function handleRouter(req: Request, res: any) {
+export function handleRouter(req: Request, res: Response) {
     let i = 0,
         len = urlMap.length;
     for (; i < len; i++) {
@@ -14,7 +15,9 @@ export function handleRouter(req: Request, res: any) {
         if (result) {
             let endpointName = urlMap[i].endpoint;
 
-            endpoint[endpointName].call(null, req, res, result);
+            req.parse(() => {
+                endpoint[endpointName].call(null, req, res, result);
+            })
             break;
         }
     }

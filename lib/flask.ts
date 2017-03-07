@@ -1,7 +1,9 @@
 import { createServer } from 'http';
 
 import { Request } from './request';
+import { Response } from './response';
 import { Sever } from './static';
+import { handleRouter } from './router';
 import { Configs, FlaskOptions, RunTimeOptions } from './configs';
 
 export const configs = new Configs();
@@ -19,9 +21,8 @@ export class Flask {
         let runTimeOptions = configs.runTimeOptions;
         let staticServer = new Sever()
 
-        return createServer((request, res) => {
-            res.setHeader('server', 'node/flask');
-
+        return createServer((request, response) => {
+            response.setHeader('server', 'node/flask');
 
             if (request.method === 'OPTIONS') {
                 // TODO: 优化options请求
@@ -29,11 +30,9 @@ export class Flask {
                 let req = new Request(request);
 
                 if (this.staticRex.test(req.pathname)) {
-                    staticServer.serve(req, res);
+                    staticServer.serve(req, response);
                 } else {
-                    req.parse(() => {
-
-                    })
+                    handleRouter(req, new Response(response));
                 }
             }
 
