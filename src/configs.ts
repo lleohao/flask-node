@@ -94,6 +94,10 @@ export interface RunTimeOptions {
     hostname?: string
 }
 
+export interface HeaderValue {
+    [key: string]: string
+}
+
 export class Configs {
     flaskOptions: {
         rootPath: string
@@ -104,9 +108,13 @@ export class Configs {
     staticServerOptions: {
         gzip: boolean | RegExp
         cache: number | boolean
-        headers: Object
+        headers: HeaderValue
     };
-    runTimeOptions: RunTimeOptions;
+    runTimeOptions: {
+        debug: boolean
+        port: number
+        hostname: string
+    };
 
     constructor() {
         this.flaskOptions = {
@@ -127,7 +135,7 @@ export class Configs {
         }
     }
 
-    setConfigs(rootPath, options: FlaskOptions) {
+    setConfigs(rootPath: string, options: FlaskOptions) {
         let staticFolder = options.staticFolder || 'static';
         let staticUrlPath = options.staticUrlPath || 'static';
         let templateFolder = options.templateFolder || 'templates';
@@ -147,7 +155,7 @@ export class Configs {
         }
     };
 
-    setRunTime(options) {
+    setRunTime(options: RunTimeOptions) {
         this.runTimeOptions = Object.assign(this.runTimeOptions, options);
     };
 };

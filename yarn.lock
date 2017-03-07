@@ -8,17 +8,29 @@
   dependencies:
     "@types/node" "*"
 
+"@types/mime@^0.0.29":
+  version "0.0.29"
+  resolved "https://registry.yarnpkg.com/@types/mime/-/mime-0.0.29.tgz#fbcfd330573b912ef59eeee14602bface630754b"
+
 "@types/mocha@^2.2.39":
   version "2.2.39"
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-2.2.39.tgz#f68d63db8b69c38e9558b4073525cf96c4f7a829"
 
-"@types/node@*", "@types/node@^7.0.5":
+"@types/node@*":
   version "7.0.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.5.tgz#96a0f0a618b7b606f1ec547403c00650210bfbb7"
+
+"@types/node@<7.0.0":
+  version "6.0.64"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.64.tgz#cdc901411f6301e1437dfed23bc68f54442e4dc8"
 
 "@types/should@^8.1.30":
   version "8.1.30"
   resolved "https://registry.yarnpkg.com/@types/should/-/should-8.1.30.tgz#e6b4f3ca4fb0799f6ce3303f3a8c003df6585aa3"
+
+"@types/swig@^0.0.28":
+  version "0.0.28"
+  resolved "https://registry.yarnpkg.com/@types/swig/-/swig-0.0.28.tgz#4b8547e458727d46c094e1e477ed36394f84db2a"
 
 amdefine@>=0.0.4:
   version "1.0.1"
@@ -337,7 +349,7 @@ get-stream@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-3.0.0.tgz#8e943d1358dc37555054ecbe2edb05aa174ede14"
 
-glob@7.0.5:
+glob@7.0.5, glob@^7.0.5:
   version "7.0.5"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.0.5.tgz#b4202a69099bbb4d292a7c1b95b6682b67ebdc95"
   dependencies:
@@ -909,6 +921,12 @@ resolve@^1.1.7:
 right-pad@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/right-pad/-/right-pad-1.0.1.tgz#8ca08c2cbb5b55e74dafa96bf7fd1a27d568c8d0"
+
+rimraf@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.1.tgz#c2338ec643df7a1b7fe5c54fa86f57428a55f33d"
+  dependencies:
+    glob "^7.0.5"
 
 safe-buffer@^5.0.1:
   version "5.0.1"

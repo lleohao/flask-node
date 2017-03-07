@@ -75,10 +75,10 @@ export class Route {
     weight: number;
 
 
-    private _regex: RegExp | null;
-    private _variable: string[] | null;
+    private _regex: RegExp;
+    private _variable: string[];
 
-    constructor(rule: string, methods: string[], endpoint: string) {
+    constructor(rule: string, methods: string[]) {
         this.rule = rule;
         this.endpoint = this.endpoint;
 
@@ -91,8 +91,7 @@ export class Route {
         }
 
 
-        this._regex = null;
-        this._variable = null;
+        this._variable = [];
         this.weight = 0;
 
         this.complie();
@@ -106,11 +105,11 @@ export class Route {
         function _build_regex(rule: string) {
             for (let [converter, variable] of _parse_rule(rule)) {
                 if (converter === null) { // static part
-                    regexParts.push(variable);
-                    self.weight += variable.length;
+                    regexParts.push(<string>variable);
+                    self.weight += (<string>variable).length;
                 } else {
                     let type = _getConverter(converter);
-                    self._variable.push(variable);
+                    self._variable.push(<string>variable);
                     regexParts.push(type.regex);
                     self.weight += type.weight;
                 }

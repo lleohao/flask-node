@@ -1,20 +1,22 @@
-import { stat, createReadStream } from 'fs';
+import { stat, createReadStream, Stats } from 'fs';
 import { STATUS_CODES, ServerResponse } from 'http';
 import { join, resolve } from 'path';
-import { Request } from './request';
+
 import * as mime from 'mime';
 
 import { configs } from './flask';
+import { Request } from './request';
+import { HeaderValue } from './configs';
 
 export class Sever {
     root: string;
     options: {
         cache?: number | boolean
         gzip?: boolean | RegExp
-        headers?: Object
+        headers?: HeaderValue
     };
     cache: number | boolean;
-    defaultHeaders: Object;
+    defaultHeaders: HeaderValue
 
     staticUrlPathLen: number;
 
@@ -29,7 +31,7 @@ export class Sever {
         if (this.options.cache === false) {
             this.cache = false;
         } else {
-            this.cache = this.options.cache;
+            this.cache = this.options.cache || 3600;
         }
 
         if (!configs.runTimeOptions.debug && this.cache !== false) {
@@ -45,7 +47,7 @@ export class Sever {
         let self = this;
         let pathname = req.pathname;
 
-        let finish = function (status: number, headers) {
+        let finish = function (status: number, headers: HeaderValue) {
             self.finish(status, headers, req, res);
         }
 
@@ -59,7 +61,7 @@ export class Sever {
         return resolve(join(this.root, pathname));
     }
 
-    private finish(status, headers, req: Request, res: ServerResponse) {
+    private finish(status: number, headers: HeaderValue, req: Request, res: ServerResponse) {
         if (status >= 400) {
             console.warn(`${req.pathname} ${status} ${STATUS_CODES[status]}`);
         }
@@ -68,11 +70,11 @@ export class Sever {
         res.end();
     }
 
-    private servePath(pathname, headers, req, res, finish: Function) {
+    private servePath(pathname: string, headers: HeaderValue, req: Request, res: ServerResponse, finish: Function) {
         pathname = this.reslove(pathname);
 
         if (pathname.indexOf(this.root) === 0) {
-            stat(pathname, (e, stat) => {
+            stat(pathname, (e: Error, stat: Stats) => {
                 if (e) {
                     finish(404, {})
                 } else if (stat.isFile()) {
@@ -86,35 +88,35 @@ export class Sever {
         }
     }
 
-    private gzipOk(req, contentType) {
+    private gzipOk(req: Request, contentType: string) {
         let enable = this.options.gzip;
 
         if (enable &&
             (typeof enable === 'boolean') ||
             (contentType && (enable instanceof RegExp) && enable.test(contentType))) {
-            let acceptEncoding = req.headers['accept-encoding'];
+            let acceptEncoding = <string>req.headers('accept-encoding');
             return acceptEncoding && acceptEncoding.indexOf('gzip') >= 0;
         }
 
         return false;
     }
 
-    private parseByteRange(req, stat) {
+    private parseByteRange(req: Request, stat: Stats) {
         let byteRange = {
             from: 0,
             to: 0,
             valid: false
         };
 
-        let rangeHeader = req.headers['range'];
+        let rangeHeader = req.headers('range');
         let flavor = 'bytes=';
 
 
         if (rangeHeader) {
             if (rangeHeader.indexOf(flavor) === 0 && rangeHeader.indexOf(',') === -1) {
-                rangeHeader = rangeHeader.substr(flavor.length).split('-');
-                byteRange.from = parseInt(rangeHeader[0]);
-                byteRange.to = parseInt(rangeHeader[1]);
+                let rangeHeaderList = rangeHeader.substr(flavor.length).split('-');
+                byteRange.from = parseInt(rangeHeaderList[0]);
+                byteRange.to = parseInt(rangeHeaderList[1]);
 
                 if (isNaN(byteRange.from) && !isNaN(byteRange.to)) {
                     byteRange.from = stat.size - byteRange.to;
@@ -135,7 +137,7 @@ export class Sever {
         return byteRange;
     }
 
-    private respond(_headers, filename, stat, req, res, finish) {
+    private respond(_headers: HeaderValue, filename: string, stat: Stats, req: Request, res: ServerResponse, finish: Function) {
         let contentType = mime.lookup(filename) || 'application/octet-stream';
 
         if (this.gzipOk(req, contentType)) {
@@ -145,25 +147,25 @@ export class Sever {
         }
     }
 
-    private respondGzip(_headers, filename, contentType, stat, req, res, finish) {
+    private respondGzip(_headers: HeaderValue, filename: string, contentType: string, _stat: Stats, req: Request, res: ServerResponse, finish: Function) {
         let gzFile = filename + '.gz';
         stat(gzFile, (e, gzStat) => {
             if (!e && gzStat.isFile()) {
                 let vary = _headers['Vary'];
                 _headers['Vary'] = (vary && vary !== 'Accept-Encoding' ? vary + ', ' : '') + 'Accept-Encoding';
                 _headers['Content-Encoding'] = 'gzip';
-                stat.size = gzStat.size;
+                _stat.size = gzStat.size;
                 filename = gzFile;
             }
 
-            this.respondNoGzip(_headers, filename, contentType, stat, req, res, finish);
+            this.respondNoGzip(_headers, filename, contentType, _stat, req, res, finish);
         })
 
     }
 
-    private respondNoGzip(_headers, filename, contentType, stat, req: Request, res, finish) {
-        let mtime = Date.parse(stat.mtime),
-            headers = {},
+    private respondNoGzip(_headers: HeaderValue, filename: string, contentType: string, stat: Stats, req: Request, res: ServerResponse, finish: Function) {
+        let mtime = Date.parse(stat.mtime.toString()),
+            headers: HeaderValue = {},
             clientETag = req.headers('if-none-match'),
             clientMTime = Date.parse(<string>req.headers('if-modified-since')),
             startByte = 0,
@@ -195,7 +197,7 @@ export class Sever {
         headers['Date'] = new (Date)().toUTCString();
         headers['Last-Modified'] = new (Date)(stat.mtime).toUTCString();
         headers['Content-Type'] = contentType;
-        headers['Content-Length'] = length;
+        headers['Content-Length'] = length.toString();
 
         if ((clientMTime || clientETag) &&
             (!clientETag || clientETag === headers['Etag']) &&
@@ -215,14 +217,14 @@ export class Sever {
         } else {
             res.writeHead(status, headers);
 
-            this.stream(filename, length, startByte, res, (e) => {
+            this.stream(filename, length, startByte, res, (e: Error) => {
                 if (e) { return finish(500, {}) }
                 finish(status, headers);
             })
         }
     }
 
-    private stream(filename, length, startByte, res, callback) {
+    private stream(filename: string, length: number, startByte: number, res: ServerResponse, callback: Function) {
         createReadStream(filename, {
             flags: 'r',
             mode: 0o666,
@@ -230,7 +232,7 @@ export class Sever {
             end: startByte + (length ? length - 1 : 0)
         }).on('close', () => {
             res.end();
-        }).on('error', (err) => {
+        }).on('error', (err: Error) => {
             callback(err);
             console.error(err);
         }).pipe(res, { end: false })

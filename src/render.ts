@@ -9,7 +9,7 @@ const prefix = configs.flaskOptions.templatesPath;
 
 if (debug) swig.setDefaults({ cache: false });
 
-swig.setFilter('static', function (input) {
+swig.setFilter('static', function (input: string) {
     return './' + configs.flaskOptions.staticRootPath + '/' + input;
 });
 

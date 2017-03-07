@@ -15,11 +15,11 @@ export class Request {
     private formParseFields: Fields;
 
     constructor(req: IncomingMessage) {
-        let parser = this.parser = parseUrl(req.url);
+        let parser = this.parser = parseUrl(<string>req.url);
 
         this.req = req;
-        this.method = req.method.toLowerCase();
-        this.pathname = parser.pathname;
+        this.method = (<string>req.method).toLowerCase();
+        this.pathname = <string>parser.pathname;
         this.formParse = new IncomingForm();
     }
 
@@ -48,7 +48,7 @@ export class Request {
      * 
      * @memberOf Request
      */
-    headers(name?: string): Object | string {
+    headers(name: string): string {
         let lc = name.toLowerCase();
         let headers = this.req.headers;
 
@@ -97,7 +97,7 @@ export class Request {
     }
 
     files(name: string): File {
-        return this.files[name];
+        return this.formParseFiles[name];
     }
 
     /**

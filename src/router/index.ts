@@ -22,12 +22,9 @@ export function handleRouter(req: Request, res: Response) {
         }
     }
 
-    if (i < len) errorHandle(req, res);
-}
-
-// TODO: 添加全局的错误处理
-function errorHandle(req: any, res: any) {
-
+    if (i < len) {
+        // TODO: add error handle
+    }
 }
 
 function _insertSort(array: Route[]) {
@@ -62,7 +59,7 @@ export class Router {
         let name = handle.name;
         if (!name) throw TypeError('handle function Can\'t be an anonymous function');
 
-        let route = new Route(path, <string[]>methods, name);
+        let route = new Route(path, <string[]>methods);
         urlMap.push(route);
         endpoint[name] = handle;
         _insertSort(urlMap)
