@@ -41,7 +41,8 @@ export class Flask {
         });
     }
 
-    run(options: RunTimeOptions = {}) {
+    run(options?: RunTimeOptions) {
+        options = options || {};
         configs.setRunTime(options);
         let runTimeOptions = configs.runTimeOptions;
 

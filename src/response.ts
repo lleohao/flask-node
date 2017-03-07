@@ -8,7 +8,7 @@ export interface ResponseData {
     headers: Object
 }
 
-interface CookieValue {
+export interface CookieValue {
     key: string;
     value: string;
     maxAge?: number;
