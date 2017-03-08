@@ -18,6 +18,7 @@ function* _parse_rule(rule: string) {
     RULE_RE.lastIndex = 0;
     while (pos < end) {
         let result = RULE_RE.exec(rule);
+        
         // result [match_input, static, arg_type, arg_name]
         if (result === null) break;
         if (result[1]) yield [null, result[1]];
@@ -78,9 +79,9 @@ export class Route {
     private _regex: RegExp;
     private _variable: string[];
 
-    constructor(rule: string, methods: string[]) {
+    constructor(rule: string, methods: string[], endpoint: string) {
         this.rule = rule;
-        this.endpoint = this.endpoint;
+        this.endpoint = endpoint;
 
 
         this.methods = methods.map(method => {

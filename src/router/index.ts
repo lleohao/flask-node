@@ -59,7 +59,7 @@ export class Router {
         let name = handle.name;
         if (!name) throw TypeError('handle function Can\'t be an anonymous function');
 
-        let route = new Route(path, <string[]>methods);
+        let route = new Route(path, <string[]>methods, name);
         urlMap.push(route);
         endpoint[name] = handle;
         _insertSort(urlMap)
