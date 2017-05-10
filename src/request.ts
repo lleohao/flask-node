@@ -25,7 +25,7 @@ export class Request {
         this.formParse = new IncomingForm();
     }
 
-    parse(parseOk: Function): EventEmitter {
+    parse(): EventEmitter {
         const promise = new EventEmitter();
 
         if (/^post$|^put$/.test(this.method)) {
@@ -36,12 +36,12 @@ export class Request {
                     this.formParseFiles = files;
                     this.formParseFields = fields;
 
-                    promise.emit('parseEnd')
+                    promise.emit('end')
                 }
             })
         } else {
             process.nextTick(() => {
-                promise.emit('parseEnd')
+                promise.emit('end')
             });
         }
 
