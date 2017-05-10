@@ -1,17 +1,7 @@
 {
     "compilerOptions": {
-        "target": "es6",
         "module": "commonjs",
-        "moduleResolution": "node",
-        "experimentalDecorators": true,
-        "noImplicitAny": false,
-        "noUnusedLocals": true,
-        "sourceMap": true,
-        "removeComments": true
-    },
-    "exclude": [
-        "node_modules",
-        "typings",
-        "tests"
-    ]
+        "target": "es2016",
+        "experimentalDecorators": true
+    }
 }
