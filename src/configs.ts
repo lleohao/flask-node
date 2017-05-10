@@ -156,6 +156,8 @@ export class Configs {
     };
 
     setRunTime(options?: RunTimeOptions) {
-        this.runTimeOptions = Object.assign(this.runTimeOptions, options);
+        if (options) {
+            this.runTimeOptions = Object.assign(this.runTimeOptions, options);
+        }
     };
 };
