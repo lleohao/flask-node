@@ -26,6 +26,7 @@ export class Flask {
 
             if (request.method === 'OPTIONS') {
                 // TODO: 优化options请求
+                response.end();
             } else {
                 let req = new Request(request);
 
@@ -52,6 +53,3 @@ export class Flask {
         console.log(`Server is run on http://${runTimeOptions.hostname}:${runTimeOptions.port}`);
     }
 }
-
-let app = new Flask(__dirname);
-app.run();
