@@ -3,7 +3,6 @@
 /// <reference path="../node_modules/@types/should/index.d.ts" />
 
 import * as should from 'should';
-import { Configs } from '../lib/configs';
 import { render } from '../lib/render';
 
 describe('render test', () => {
