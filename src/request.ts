@@ -1,14 +1,16 @@
 import { IncomingMessage } from 'http';
 import { parse as parseUrl, Url } from 'url';
 import { parse } from 'querystring';
+import { EventEmitter } from 'events';
 
 import { IncomingForm, Files, Fields, File } from 'formidable';
 
 export class Request {
     private req: IncomingMessage;
+    private parser: Url;
+
     pathname: string;
     method: string;
-    private parser: Url;
 
     private formParse: IncomingForm;
     private formParseFiles: Files;
@@ -23,21 +25,27 @@ export class Request {
         this.formParse = new IncomingForm();
     }
 
-    parse(parseOk: Function) {
+    parse(): EventEmitter {
+        const promise = new EventEmitter();
+
         if (/^post$|^put$/.test(this.method)) {
             this.formParse.parse(this.req, (err, fields, files) => {
                 if (err) {
-                    // TODO: add error function
+                    promise.emit('error')
                 } else {
                     this.formParseFiles = files;
                     this.formParseFields = fields;
 
-                    parseOk();
+                    promise.emit('end')
                 }
             })
         } else {
-            parseOk();
+            process.nextTick(() => {
+                promise.emit('end')
+            });
         }
+
+        return promise;
     }
 
     /**

@@ -6,7 +6,6 @@ import { Response } from '../response';
 export const urlMap: Route[] = [];
 const endpoint: any = {};
 
-// FIXME: 等待修复req res 模块
 export function handleRouter(req: Request, res: Response) {
     let i = 0,
         len = urlMap.length;
@@ -15,19 +14,20 @@ export function handleRouter(req: Request, res: Response) {
         if (result) {
             let endpointName = urlMap[i].endpoint;
 
-            req.parse(() => {
+            req.parse().on('end', () => {
                 endpoint[endpointName].call(null, req, res, result);
+            }).on('error', () => {
+                res.end('500 Not Found', 500);
             })
             break;
         }
     }
 
     if (i < len) {
-        // TODO: add error handle
     }
 }
 
-function _insertSort(array: Route[]) {
+const _insertSort = function _insertSort(array: Route[]) {
     let length = array.length,
         j, temp;
 
@@ -44,7 +44,7 @@ function _insertSort(array: Route[]) {
 }
 
 export class Router {
-    prefix: string;
+    readonly prefix: string;
 
     constructor(prefix: string = '') {
         this.prefix = prefix;
@@ -56,12 +56,14 @@ export class Router {
             methods = ['get'];
         }
 
-        let name = handle.name;
+        const name = handle.name;
         if (!name) throw TypeError('handle function Can\'t be an anonymous function');
 
-        let route = new Route(path, <string[]>methods, name);
-        urlMap.push(route);
+        path = this.prefix + '/' + path;
+
+        urlMap.push(new Route(path, <string[]>methods, name));
         endpoint[name] = handle;
+
         _insertSort(urlMap)
     }
 }
