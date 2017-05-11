@@ -14,16 +14,19 @@ export function handleRouter(req: Request, res: Response) {
         if (result) {
             let endpointName = urlMap[i].endpoint;
 
-            req.parse().on('end', () => {
-                endpoint[endpointName].call(null, req, res, result);
-            }).on('error', () => {
-                res.end('500 Not Found', 500);
+            req.parse((err: Error) => {
+                if (err !== null) {
+                    res.end('500 Server error', 500);
+                } else {
+                    endpoint[endpointName].call(null, req, res, result);
+                }
             })
             break;
         }
     }
 
-    if (i < len) {
+    if (i === len) {
+        res.end('404 Not Found', 404);
     }
 }
 
