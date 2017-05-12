@@ -1,10 +1,13 @@
 import { join } from 'path';
+import { createReadStream, createWriteStream } from 'fs';
 import { Flask, Router, Request, Response } from '../lib';
 
-const app = new Flask(join(__dirname, '..', 'example'));
+const rootPath = join(__dirname, '..', 'example');
+
+const app = new Flask(rootPath);
 const router = new Router();
 
-let isLogin = false;
+let isLogin = true;
 
 const indexHandle = (req: Request, res: Response) => {
     if (isLogin === false) {
@@ -18,7 +21,24 @@ const uploadHandle = (req: Request, res: Response) => {
     if (isLogin === false) {
         res.redirect('/login');
     } else {
-        res.render('upload-main.html');
+        if (req.method === 'get') {
+            res.render('upload-main.html');
+        } else {
+            let file = req.files('uploadFile');
+            let ws = createWriteStream(join(rootPath, 'upload', file.name));
+
+            createReadStream(file.path).pipe(ws).on('close', () => {
+                res.end({
+                    entiry: JSON.stringify({
+                        data: { code: 200, filename: file.name }
+                    }),
+                    status: 200,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }, 200);
+            });
+        }
     }
 };
 
@@ -44,7 +64,7 @@ const loginHandle = (req: Request, res: Response) => {
 };
 
 router.add('/', ['get'], indexHandle);
-router.add('/upload', ['get'], uploadHandle);
+router.add('/upload', ['get', 'post'], uploadHandle);
 router.add('/login', ['get', 'post'], loginHandle);
 
 app.run({ debug: true });

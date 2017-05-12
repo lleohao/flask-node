@@ -22,9 +22,93 @@
         </ul>
     </div>
 </nav>
-<div class="container">
+<div class="container wrap">
     <div class="row">
-       
+       <div class="col-md-6 first">
+            <p>请将文件拖入其中虚线框中</p>
+            <div id="upload-area">
+                <div class="preview" style="display: none;">
+                    <p>文件名:<span id="filename"></span></p>
+                    <p>文件大小:<span id="filesize"></span></p>
+                </div>
+            </div>
+            <button class="btn btn-primary disabled" id="btn-upload">上传</button>
+       </div>
+       <div class="col-md-6">
+           <p>代码:</p>
+           <pre>
+               <code class="typescript">
+
+               </code>
+            </pre>
+       </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(function () {
+        $(document).on({
+            dragleave: function (e) {
+                e.preventDefault();
+            },
+            drop: function (e) {
+                e.preventDefault();
+            },
+            dragenter: function (e) {
+                e.preventDefault();
+            },
+            dragover: function (e) {
+                e.preventDefault();
+            }
+        });
+
+        var uploadArea = document.getElementById("upload-area");
+        uploadArea.addEventListener("dragenter", function (e) {
+            var types = e.dataTransfer.types;
+            if (!types ||
+                (types.contains && types.contains("Files")) ||
+                (types.indexOf && types.indexOf("Files") != -1)) {
+                $(uploadArea).addClass("active");
+                e.preventDefault();
+            }
+        })
+
+        uploadArea.addEventListener("dragleave", function (e) {
+            $(uploadArea).removeClass("active");
+        })
+
+        uploadArea.addEventListener("dragover", function (e) {
+            e.preventDefault();
+        })
+
+        uploadArea.addEventListener("drop", function (e) {
+            e.preventDefault();
+            var fileList = e.dataTransfer.files;
+
+            $(".preview").show();
+            $("#filename").text(fileList[0].name);
+            $("#filesize").text((fileList[0].size / 1024).toFixed(2) + "kb");
+
+            $("#btn-upload").on("click", function () {
+                var req = new XMLHttpRequest();
+                req.open("post", "./upload");
+                req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
+                var fd = new FormData();
+                fd.append("uploadFile", fileList[0]);
+
+                req.onload = function(e) {
+                    var data = JSON.parse(this.responseText).data;
+                    if (data.code === 200) {
+                        window.location.href = '/?filename=' + data.filename;
+                    }
+                };
+  
+                req.send(fd);
+            }).removeClass('disabled');
+        });
+    });
+</script>
 {% endblock %}

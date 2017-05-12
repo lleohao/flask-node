@@ -11,6 +11,7 @@
 </head>
 <body>
     {% block main %}{% endblock %}
+
     <script src={{ 'lib/jquery/jquery-3.2.1.min.js' | static }}></script>
     <script src={{ 'lib/bootstrap/js/bootstrap.min.js' | static }}></script>
     <script src={{ 'lib/highlight/highlight.pack.js' | static }}></script>
@@ -21,5 +22,8 @@
             });
         });
     </script>
+
+    {% block scripts %}
+    {% endblock %}
 </body>
 </html>
