@@ -33,12 +33,11 @@ export class Request {
                     this.formParseFiles = files;
                     this.formParseFields = fields;
 
-                    parseOk();
+                    parseOk(null);
                 }
             })
         } else {
-            console.log('parse');
-            parseOk();
+            parseOk(null);
         }
     }
 

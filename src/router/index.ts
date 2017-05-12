@@ -62,7 +62,10 @@ export class Router {
         const name = handle.name;
         if (!name) throw TypeError('handle function Can\'t be an anonymous function');
 
-        path = this.prefix + '/' + path;
+        if (this.prefix !== '') {
+            path = '/' + this.prefix + path;
+        }
+
 
         urlMap.push(new Route(path, <string[]>methods, name));
         endpoint[name] = handle;
