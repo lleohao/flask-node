@@ -10,7 +10,7 @@ export function createRender(configs: Configs): Function {
     if (debug) swig.setDefaults({ cache: false });
 
     swig.setFilter('static', function (input: string) {
-        return './' + configs.flaskOptions.staticRootPath + '/' + input;
+        return './' + configs.flaskOptions.staticUrlPath + '/' + input;
     });
 
     /**
