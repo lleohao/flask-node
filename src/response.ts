@@ -15,10 +15,6 @@ export interface CookieValue {
     path?: string;
 }
 
-const defaultHeader = {
-    'Content-Type': 'text/html'
-}
-
 export class Response {
     constructor(private res: ServerResponse, private _render: Function) {
         this.res = res;
@@ -28,7 +24,7 @@ export class Response {
     private finish(status: number, headers: Object, entiry?: Object) {
         let res = this.res;
 
-        headers = Object.assign(defaultHeader, headers);
+        headers = Object.assign({'Content-Type': 'text/html'}, headers);
 
         res.writeHead(status, headers);
         if (entiry !== undefined) res.write(entiry);
