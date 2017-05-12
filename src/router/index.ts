@@ -11,6 +11,7 @@ export function handleRouter(req: Request, res: Response) {
         len = urlMap.length;
     for (; i < len; i++) {
         let result = urlMap[i].match(req.pathname);
+        console.log(urlMap[i]);
         if (result) {
             let endpointName = urlMap[i].endpoint;
 
