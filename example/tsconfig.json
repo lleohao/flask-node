@@ -4,13 +4,7 @@
         "target": "es2016",
         "experimentalDecorators": true,
 
-        "noImplicitAny": true,
-        "noImplicitReturns": true,
-        "noImplicitThis": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "strictNullChecks": true,
-
+        "outDir": "../dist",
         "sourceMap": true
     }
 }

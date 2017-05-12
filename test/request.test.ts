@@ -108,8 +108,10 @@ describe('Request test', () => {
         let server = createServer((req, res) => {
             const request = new Request(req);
 
-            request.parse().on('end', () => {
-                res.end(request.form('test'));
+            request.parse((err) => {
+                if (err !== null) {
+                    res.end(request.form('test'));
+                }
             })
         });
         server.listen(5050);

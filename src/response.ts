@@ -1,7 +1,5 @@
 import { ServerResponse } from 'http';
 
-import { render } from './render';
-
 export interface ResponseData {
     entiry: string;
     status: number;
@@ -17,21 +15,16 @@ export interface CookieValue {
     path?: string;
 }
 
-const defaultHeader = {
-    'Content-Type': 'text/html'
-}
-
 export class Response {
-    private res: ServerResponse;
-
-    constructor(res: ServerResponse) {
+    constructor(private res: ServerResponse, private _render: Function) {
         this.res = res;
+        this._render = _render;
     }
 
     private finish(status: number, headers: Object, entiry?: Object) {
         let res = this.res;
 
-        headers = Object.assign(defaultHeader, headers);
+        headers = Object.assign({'Content-Type': 'text/html'}, headers);
 
         res.writeHead(status, headers);
         if (entiry !== undefined) res.write(entiry);
@@ -66,7 +59,7 @@ export class Response {
     }
 
     render(templatePath: string, data?: Object) {
-        let response = render(templatePath, data);
+        let response = this._render(templatePath, data);
 
         this.end(response);
     }

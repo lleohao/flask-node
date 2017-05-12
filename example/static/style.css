@@ -1,0 +1,17 @@
+.wrap {
+    margin-top: 24px;
+}
+
+.wrap .first {
+    border-right: 1px dashed #ccc;
+}
+
+#upload-area {
+    width: 100%;
+    height: 240px;
+
+    padding: 10px;
+    margin-bottom: 24px;
+
+    border: 1px dashed #ccc;
+}

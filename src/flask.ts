@@ -4,17 +4,20 @@ import { Request } from './request';
 import { Response } from './response';
 import { Sever } from './static';
 import { handleRouter } from './router';
+import { createRender } from './render';
 import { Configs, FlaskOptions, RunTimeOptions } from './configs';
 
 export const configs = new Configs();
 
 export class Flask {
     staticRex: RegExp;
+    render: Function;
 
     constructor(rootPath: string, options: FlaskOptions = {}) {
         configs.setConfigs(rootPath, options);
 
         this.staticRex = new RegExp('^\/' + configs.flaskOptions.staticUrlPath + '\/');
+        this.render = createRender(configs);
     }
 
     private createServer() {
@@ -33,7 +36,7 @@ export class Flask {
                 if (this.staticRex.test(req.pathname)) {
                     staticServer.serve(req, response);
                 } else {
-                    handleRouter(req, new Response(response));
+                    handleRouter(req, new Response(response, this.render));
                 }
             }
 

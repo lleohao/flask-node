@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href={{ 'lib/bootstrap/css/bootstrap.min.css' | static }}>
+    <link rel="stylesheet" href={{ 'lib/highlight/styles/default.css' | static }}>
+    <link rel="stylesheet" href={{ 'style.css' | static }}>
+    <title> {% block title %}{{ title }}{% endblock %}</title>
+</head>
+<body>
+    {% block main %}{% endblock %}
+
+    <script src={{ 'lib/jquery/jquery-3.2.1.min.js' | static }}></script>
+    <script src={{ 'lib/bootstrap/js/bootstrap.min.js' | static }}></script>
+    <script src={{ 'lib/highlight/highlight.pack.js' | static }}></script>
+    <script>
+        $(document).ready(function() {
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+    </script>
+
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>
