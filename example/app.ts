@@ -7,7 +7,7 @@ const rootPath = join(__dirname, '..', 'example');
 const app = new Flask(rootPath);
 const router = new Router();
 
-let isLogin = true;
+let isLogin = false;
 
 const indexHandle = (req: Request, res: Response) => {
     if (isLogin === false) {
@@ -25,12 +25,12 @@ const uploadHandle = (req: Request, res: Response) => {
             res.render('upload-main.html');
         } else {
             let file = req.files('uploadFile');
-            let ws = createWriteStream(join(rootPath, 'upload', file.name));
+            let ws = createWriteStream(join(rootPath, 'static/upload', 'upload.jpg'));
 
             createReadStream(file.path).pipe(ws).on('close', () => {
                 res.end({
                     entiry: JSON.stringify({
-                        data: { code: 200, filename: file.name }
+                        data: { code: 200, filename: 'upload.jpg' }
                     }),
                     status: 200,
                     headers: {
@@ -54,7 +54,7 @@ const loginHandle = (req: Request, res: Response) => {
         if (req.form('username') === user.username
             && req.form('password') === user.password) {
             isLogin = true;
-            res.redirect('/');
+            res.redirect('/upload');
         } else {
             res.render('login-main.html', {
                 message: '账户或密码错误'

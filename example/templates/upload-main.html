@@ -38,7 +38,32 @@
            <p>代码:</p>
            <pre>
                <code class="typescript">
+const uploadHandle = (req: Request, res: Response) => {
+    if (isLogin === false) {
+        res.redirect('/login');
+    } else {
+        if (req.method === 'get') {
+            res.render('upload-main.html');
+        } else {
+            let file = req.files('uploadFile');
+            let ws = createWriteStream(join(rootPath, 'static/upload', 'upload.jpg'));
 
+            createReadStream(file.path).pipe(ws).on('close', () => {
+                res.end({
+                    entiry: JSON.stringify({
+                        data: { code: 200, filename: 'upload.jpg' }
+                    }),
+                    status: 200,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }, 200);
+            });
+        }
+    }
+};
+
+router.add('/upload', ['get', 'post'], uploadHandle);
                </code>
             </pre>
        </div>
