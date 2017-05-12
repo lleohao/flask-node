@@ -1,7 +1,7 @@
 import { join } from 'path';
-import { Flask, Router, Request, Response } from '../../lib';
+import { Flask, Router, Request, Response } from '../lib';
 
-const app = new Flask(join(__dirname, '..', 'loginDemo'));
+const app = new Flask(join(__dirname, '..', 'example'));
 const router = new Router();
 
 const indexHandle = (req: Request, res: Response) => {

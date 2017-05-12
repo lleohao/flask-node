@@ -4,11 +4,7 @@
         "target": "es2016",
         "experimentalDecorators": true,
 
-        "outDir": "./dist",
+        "outDir": "../dist",
         "sourceMap": true
-    },
-    "include": [
-        "loginDemo",
-        "uploadDemo"
-    ]
+    }
 }
