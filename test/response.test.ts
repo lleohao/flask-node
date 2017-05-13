@@ -5,11 +5,16 @@
 import { createServer, get, request } from 'http';
 import * as should from 'should';
 import { Response } from '../lib/response';
+import { createRender } from '../lib/render';
+import { Configs  } from '../lib/configs';
+
+const configs = new Configs();
+const render = createRender(configs);
 
 describe('Response test', function () {
     it('setCookie test', (done) => {
         let server = createServer((req, res) => {
-            const response = new Response(res);
+            const response = new Response(res, render);
 
             response.setCookie({
                 key: 'test',
@@ -30,7 +35,7 @@ describe('Response test', function () {
 
     it('abort test', (done) => {
         let server = createServer((req, res) => {
-            const response = new Response(res);
+            const response = new Response(res, render);
 
             response.abort();
         });
@@ -47,7 +52,7 @@ describe('Response test', function () {
 
     it('abort test', (done) => {
         let server = createServer((req, res) => {
-            const response = new Response(res);
+            const response = new Response(res, render);
 
             response.redirect('/main');
         });
@@ -64,8 +69,8 @@ describe('Response test', function () {
 
     it('templatePath test', (done) => {
         let server = createServer((req, res) => {
-            const response = new Response(res);
-
+            const response = new Response(res, render);
+            
             response.render('<h1>hello {{ name }}</h1>', { name: 'lleohao' });
         });
         server.listen(5050);

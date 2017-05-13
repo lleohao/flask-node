@@ -109,7 +109,7 @@ describe('Request test', () => {
             const request = new Request(req);
 
             request.parse((err) => {
-                if (err !== null) {
+                if (err === null) {
                     res.end(request.form('test'));
                 }
             })

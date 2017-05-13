@@ -2,6 +2,8 @@
 .vscode
 
 lib/
-node_modules/
 dist/
 example/static/upload
+
+node_modules/
+coverage/

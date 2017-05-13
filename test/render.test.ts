@@ -3,7 +3,11 @@
 /// <reference path="../node_modules/@types/should/index.d.ts" />
 
 import * as should from 'should';
-import { render } from '../lib/render';
+import { createRender } from '../lib/render';
+import { Configs  } from '../lib/configs';
+
+const configs = new Configs();
+const render = createRender(configs);
 
 describe('render test', () => {
     it('return string template', () => {
