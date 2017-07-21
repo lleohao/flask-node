@@ -1,15 +1,20 @@
 {
   "name": "flask-node",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "similar to python Flask web-framework",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "rimraf lib/* && tsc -p src",
+    "prepublish": "npm run build",
     "test": "./node_modules/.bin/mocha -r ./node_modules/ts-node/register ./test/*.ts",
     "cov": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- test/*.ts --report lcovonly --compilers ts:ts-node/register && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "cover": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- test/*.ts --report lcovonly --compilers ts:ts-node/register",
-    "report": "mocha --recursive --reporter mochawesome"
+    "report": "mocha --recursive --reporter mochawesome",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "repository": {
     "type": "git",

@@ -1,12 +1,8 @@
-/// <reference path="../node_modules/@types/mocha/index.d.ts" />
-/// <reference path="../node_modules/@types/node/index.d.ts" />
-/// <reference path="../node_modules/@types/should/index.d.ts" />
-
 import { createServer, get, request } from 'http';
 import * as should from 'should';
 import { Response } from '../lib/response';
 import { createRender } from '../lib/render';
-import { Configs  } from '../lib/configs';
+import { Configs } from '../lib/configs';
 
 const configs = new Configs();
 const render = createRender(configs);
@@ -70,7 +66,7 @@ describe('Response test', function () {
     it('templatePath test', (done) => {
         let server = createServer((req, res) => {
             const response = new Response(res, render);
-            
+
             response.render('<h1>hello {{ name }}</h1>', { name: 'lleohao' });
         });
         server.listen(5050);

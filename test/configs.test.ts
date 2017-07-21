@@ -1,10 +1,6 @@
-/// <reference path="../node_modules/@types/mocha/index.d.ts" />
-/// <reference path="../node_modules/@types/node/index.d.ts" />
-/// <reference path="../node_modules/@types/should/index.d.ts" />
-
-import { normalize, join, resolve } from 'path';
 import * as should from 'should';
-import { Configs, FlaskOptions, RunTimeOptions } from '../src/configs';
+import { normalize, join, resolve } from 'path';
+import { Configs, FlaskOptions, RunTimeOptions } from '../lib/configs';
 
 describe('configs test', () => {
     it('constructor test', () => {
@@ -110,4 +106,3 @@ describe('configs test', () => {
         })
     })
 });
-

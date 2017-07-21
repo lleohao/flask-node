@@ -1,10 +1,6 @@
-/// <reference path="../node_modules/@types/mocha/index.d.ts" />
-/// <reference path="../node_modules/@types/node/index.d.ts" />
-/// <reference path="../node_modules/@types/should/index.d.ts" />
-
 import * as should from 'should';
 import { createRender } from '../lib/render';
-import { Configs  } from '../lib/configs';
+import { Configs } from '../lib/configs';
 
 const configs = new Configs();
 const render = createRender(configs);

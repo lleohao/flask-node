@@ -1,7 +1,3 @@
-/// <reference path="../node_modules/@types/mocha/index.d.ts" />
-/// <reference path="../node_modules/@types/node/index.d.ts" />
-/// <reference path="../node_modules/@types/should/index.d.ts" />
-
 import * as should from 'should';
 import { Router, handleRouter, urlMap } from '../lib/router';
 
