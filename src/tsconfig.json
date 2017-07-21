@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
+        "target": "es6",
         "module": "commonjs",
-        "target": "es2016",
         "experimentalDecorators": true,
 
         "noImplicitAny": true,
@@ -12,7 +12,6 @@
         "strictNullChecks": true,
 
         "declaration": true,
-        "removeComments": true,
         "sourceMap": true,
         "outDir": "../lib"
     }

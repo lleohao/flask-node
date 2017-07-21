@@ -1,9 +1,12 @@
+# Setting folders
 .idea
 .vscode
 
+# Build folders
 lib/
-dist/
 example/static/upload
 
+# Other folders
 node_modules/
 coverage/
+mochawesome-report/
