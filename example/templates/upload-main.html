@@ -1,7 +1,4 @@
-{% extends 'layout.html' %} 
-{% block title %}Flask-node demo{% endblock %}
-
-{% block main %}
+{% extends 'layout.html' %} {% block title %}Upload page{% endblock %} {% block main %}
 <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
         aria-expanded="false" aria-label="Toggle navigation">
@@ -11,32 +8,38 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="/">图片预览 <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/">Photo View
+                    <span class="sr-only">(current)</span>
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="/upload">上传页面</a>
+                <a class="nav-link active" href="/upload">Upload</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/login">登录页面</a>
+                <a class="nav-link" href="/login">Login</a>
             </li>
         </ul>
     </div>
 </nav>
 <div class="container wrap">
     <div class="row">
-       <div class="col-md-6 first">
-            <p>请将文件拖入其中虚线框中</p>
+        <div class="col-md-6 first">
+            <p>Please drag file</p>
             <div id="upload-area">
                 <div class="preview" style="display: none;">
-                    <p>文件名:<span id="filename"></span></p>
-                    <p>文件大小:<span id="filesize"></span></p>
+                    <p>Filename:
+                        <span id="filename"></span>
+                    </p>
+                    <p>Filesize:
+                        <span id="filesize"></span>
+                    </p>
                 </div>
             </div>
-            <button class="btn btn-primary disabled" id="btn-upload">上传</button>
-       </div>
-       <div class="col-md-6">
-           <p>代码:</p>
-           <pre>
+            <button class="btn btn-primary disabled" id="btn-upload">Upload</button>
+        </div>
+        <div class="col-md-6">
+            <p>Code: </p>
+            <pre>
                <code class="typescript">
 const uploadHandle = (req: Request, res: Response) => {
     if (isLogin === false) {
@@ -66,12 +69,10 @@ const uploadHandle = (req: Request, res: Response) => {
 router.add('/upload', ['get', 'post'], uploadHandle);
                </code>
             </pre>
-       </div>
+        </div>
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
     $(function () {
         $(document).on({
@@ -124,16 +125,15 @@ router.add('/upload', ['get', 'post'], uploadHandle);
                 var fd = new FormData();
                 fd.append("uploadFile", fileList[0]);
 
-                req.onload = function(e) {
+                req.onload = function (e) {
                     var data = JSON.parse(this.responseText).data;
                     if (data.code === 200) {
                         window.location.href = '/?filename=' + data.filename;
                     }
                 };
-  
+
                 req.send(fd);
             }).removeClass('disabled');
         });
     });
-</script>
-{% endblock %}
+</script> {% endblock %}

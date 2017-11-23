@@ -2,37 +2,26 @@ import { Route } from './route';
 import { Request } from '../request';
 import { Response } from '../response';
 
+/**
+ * Save all url <-> endpoint map
+ */
+const endpoints: any = {};
 
-export const urlMap: Route[] = [];
-const endpoint: any = {};
+/**
+ * All route array list
+ * @private
+ */
+export const routeList: Route[] = [];
 
-export function handleRouter(req: Request, res: Response) {
-    let i = 0,
-        len = urlMap.length;
-    for (; i < len; i++) {
-        let result = urlMap[i].match(req.pathname);
-        if (result) {
-            let endpointName = urlMap[i].endpoint;
-
-            req.parse((err: Error) => {
-                if (err !== null) {
-                    res.end('500 Server error', 500);
-                } else {
-                    endpoint[endpointName].call(null, req, res, result);
-                }
-            })
-            break;
-        }
-    }
-
-    if (i === len) {
-        res.end('404 Not Found', 404);
-    }
-}
-
+/**
+ * inster sourt
+ * @param array
+ * @private
+ */
 const _insertSort = function _insertSort(array: Route[]) {
     let length = array.length,
-        j, temp;
+        j,
+        temp;
 
     for (let i = 1; i < length; i++) {
         j = i;
@@ -44,32 +33,79 @@ const _insertSort = function _insertSort(array: Route[]) {
         }
         array[j] = temp;
     }
+};
+
+/**
+ * According the request to select the appropriate handler
+ * @param req
+ * @param res
+ * @private
+ */
+export function handleRouter(req: Request, res: Response) {
+    let i = 0,
+        len = routeList.length;
+    for (; i < len; i++) {
+        let result = routeList[i].match(req.pathname);
+        if (result) {
+            let endpointName = routeList[i].endpoint;
+
+            req.parse((err: Error) => {
+                if (err !== null) {
+                    res.end(err.message, 500);
+                } else {
+                    endpoints[endpointName].call(null, req, res, result);
+                }
+            });
+            break;
+        }
+    }
+
+    if (i === len) {
+        res.end('404 Not Found', 404);
+    }
 }
 
+/**
+ * Router class
+ */
 export class Router {
     readonly prefix: string;
 
+    /**
+     * Create a router instance
+     * @param prefix - the prefix string will add to URL rule before
+     */
     constructor(prefix: string = '') {
         this.prefix = prefix;
     }
 
-    add(path: string, methods: string[] | Function, handle?: Function | undefined) {
-        if (handle === undefined) {
-            handle = <Function>methods;
+    /**
+     * A method that is used to register a view function for a given URL rule.
+     * @param url - the URL rule as string
+     * @param methods - the HTTP method list
+     * @param endpoint - the view function
+     */
+    public add(
+        url: string,
+        methods: string[] | Function,
+        endpoint?: Function | undefined
+    ) {
+        if (endpoint === undefined) {
+            endpoint = <Function>methods;
             methods = ['get'];
         }
 
-        const name = handle.name;
-        if (!name) throw TypeError('handle function Can\'t be an anonymous function');
+        const name = endpoint.name;
+        if (!name)
+            throw TypeError(`handle function Can't be an anonymous function`);
 
         if (this.prefix !== '') {
-            path = '/' + this.prefix + path;
+            url = '/' + this.prefix + url;
         }
 
+        routeList.push(new Route(url, <string[]>methods, name));
+        endpoints[name] = endpoint;
 
-        urlMap.push(new Route(path, <string[]>methods, name));
-        endpoint[name] = handle;
-
-        _insertSort(urlMap)
+        _insertSort(routeList);
     }
 }

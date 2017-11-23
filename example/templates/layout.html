@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href={{ 'style.css' | static }}>
     <title> {% block title %}{{ title }}{% endblock %}</title>
 </head>
+
 <body>
     {% block main %}{% endblock %}
 
@@ -16,14 +18,12 @@
     <script src={{ 'lib/bootstrap/js/bootstrap.min.js' | static }}></script>
     <script src={{ 'lib/highlight/highlight.pack.js' | static }}></script>
     <script>
-        $(document).ready(function() {
-            $('pre code').each(function(i, block) {
+        $(document).ready(function () {
+            $('pre code').each(function (i, block) {
                 hljs.highlightBlock(block);
             });
         });
-    </script>
-
-    {% block scripts %}
-    {% endblock %}
+    </script> {% block scripts %} {% endblock %}
 </body>
+
 </html>

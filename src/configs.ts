@@ -2,118 +2,96 @@ import { join, resolve, normalize } from 'path';
 
 /**
  * Flask app options
- * 
- * @export
- * @interface FlaskOptions
  */
 export interface FlaskOptions {
     /**
      * static file folder
-     * 
-     * @type {string}
-     * @memberOf FlaskOptions
      */
-    staticFolder?: string
+    staticFolder?: string;
     /**
      * static path
-     * 
-     * @type {string}
-     * @memberOf FlaskOptions
      */
-    staticUrlPath?: string
+    staticUrlPath?: string;
     /**
      * template file folder
-     * 
-     * @type {string}
-     * @memberOf FlaskOptions
      */
-    templateFolder?: string
+    templateFolder?: string;
     /**
      * Static server options
-     * 
-     * @type {StaticServerOptions}
-     * @memberOf FlaskOptions
      */
-    staticOptions?: StaticServerOptions
+    staticOptions?: StaticServerOptions;
 }
 
 /**
- * 
- * 
- * @export
- * @interface StaticServerOptions
+ * Static server options
  */
 export interface StaticServerOptions {
     /**
-     * whether open cahce
-     * if debug is true, this cahce is useless
-     * 
-     * @type {(number | boolean)}
-     * @memberOf StaticServerOptions
+     * whether open cahce.
+     *
+     * if debug is true, this cahce is useless.
      */
-    cache?: number | boolean
+    cache?: number | boolean;
     /**
      * whether open gizp
-     * 
-     * @type {(boolean | RegExp)}
-     * @memberOf StaticServerOptions
      */
-    gzip?: boolean | RegExp
+    gzip?: boolean | RegExp;
 }
 
 /**
- * run time options 
- * 
- * @export
- * @interface RunTimeOptions
+ * Server running options
  */
-export interface RunTimeOptions {
+export interface ServerRunningOptions {
     /**
-      * whether open debug mode
-      * 
-      * @type {boolean}
-      * @default false
-      * @memberOf FlaskRuntimeOptions
-      */
-    debug?: boolean
-    /**
-     * server port 
-     * 
-     * @type {number}
-     * @default 5050
-     * @memberOf FlaskRuntimeOptions
+     * whether open debug mode
      */
-    port?: number
+    debug?: boolean;
+    /**
+     * server port
+     */
+    port?: number;
     /**
      * server hostname
-     * 
-     * @type {string}
-     * @default localhost
-     * @memberOf FlaskRuntimeOptions
      */
-    hostname?: string
+    hostname?: string;
 }
 
+/**
+ * HTTP header k-v object
+ */
 export interface HeaderValue {
-    [key: string]: string
+    [key: string]: string;
 }
 
+/**
+ * Global Configs Class
+ * @private
+ */
 export class Configs {
+    /**
+     * Flask options
+     */
     flaskOptions: {
-        rootPath: string
-        templatesPath: string
-        staticRootPath: string
-        staticUrlPath: string
+        rootPath: string;
+        templatesPath: string;
+        staticRootPath: string;
+        staticUrlPath: string;
     };
+    /**
+     * Statuc server options
+     */
     staticServerOptions: {
-        gzip: boolean | RegExp
-        cache: number | boolean
-        headers: HeaderValue
+        gzip: boolean | RegExp;
+        cache: number | boolean;
+        headers: HeaderValue;
     };
-    runTimeOptions: {
-        debug: boolean
-        port: number
-        hostname: string
+    /**
+     * Server running options
+     */
+    ServerRunningOptions: {
+        debug: boolean;
+        port: number;
+        hostname: string;
     };
 
     constructor() {
@@ -128,11 +106,11 @@ export class Configs {
             gzip: true,
             headers: {}
         };
-        this.runTimeOptions = {
+        this.ServerRunningOptions = {
             debug: false,
             port: 5050,
             hostname: 'localhost'
-        }
+        };
     }
 
     setConfigs(rootPath: string, options: FlaskOptions) {
@@ -146,18 +124,27 @@ export class Configs {
 
         let flaskOptions = this.flaskOptions;
         flaskOptions.rootPath = rootPath;
-        flaskOptions.staticUrlPath = normalize(staticUrlPath).replace('\\', '/');
+        flaskOptions.staticUrlPath = normalize(staticUrlPath).replace(
+            '\\',
+            '/'
+        );
         flaskOptions.templatesPath = resolve(join(rootPath, templateFolder));
         flaskOptions.staticRootPath = resolve(join(rootPath, staticFolder));
 
         if (options.staticOptions) {
-            this.staticServerOptions = Object.assign(this.staticServerOptions, options.staticOptions)
+            this.staticServerOptions = Object.assign(
+                this.staticServerOptions,
+                options.staticOptions
+            );
         }
-    };
+    }
 
-    setRunTime(options?: RunTimeOptions) {
+    setRunTime(options?: ServerRunningOptions) {
         if (options) {
-            this.runTimeOptions = Object.assign(this.runTimeOptions, options);
+            this.ServerRunningOptions = Object.assign(
+                this.ServerRunningOptions,
+                options
+            );
         }
-    };
-};
+    }
+}

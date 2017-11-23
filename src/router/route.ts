@@ -1,14 +1,13 @@
 /**
- * 解析url 正则表达式
- * @type {RegExp}
+ * parse url
  * @private
  */
 const RULE_RE = /([^<]*)<(?:([a-zA-Z_][a-zA-Z0-9_]*):)?([a-zA-Z_][a-zA-Z0-9_]*)>/g;
 
 /**
  * parse url rule
- * 
- * @param {string} rule 
+ * @param rule
+ * @private
  */
 function* _parse_rule(rule: string) {
     let pos = 0;
@@ -18,13 +17,14 @@ function* _parse_rule(rule: string) {
     RULE_RE.lastIndex = 0;
     while (pos < end) {
         let result = RULE_RE.exec(rule);
-        
+
         // result [match_input, static, arg_type, arg_name]
         if (result === null) break;
         if (result[1]) yield [null, result[1]];
         let variable = result[3];
         let converter = result[2] || 'default';
-        if (usedNames.has(variable)) throw TypeError(`variable name ${variable} used twice.`);
+        if (usedNames.has(variable))
+            throw TypeError(`variable name ${variable} used twice.`);
         usedNames.add(variable);
         yield [converter, variable];
         pos = RULE_RE.lastIndex;
@@ -32,20 +32,21 @@ function* _parse_rule(rule: string) {
 
     if (pos < end) {
         let remaining = rule.substr(pos);
-        if (remaining.indexOf('>') !== -1 || remaining.indexOf('<') !== -1) throw TypeError(`malformed url rule: ${rule}`);
+        if (remaining.indexOf('>') !== -1 || remaining.indexOf('<') !== -1)
+            throw TypeError(`malformed url rule: ${rule}`);
         yield [null, remaining];
     }
 }
 
 /**
  * get converter type
- * @param type {string}
- * @return {string}
+ * @param type
  * @private
  */
-function _getConverter(type: string) {
+function _getConverter(type: string): { regex: string; weight: number } {
     let converterTypes = ['str', 'int', 'float', 'path', 'default'];
-    if (converterTypes.indexOf(type) === -1) throw TypeError('converter type ' + type + ' is undefined');
+    if (converterTypes.indexOf(type) === -1)
+        throw TypeError('converter type ' + type + ' is undefined');
 
     let result = { regex: '', weight: 0 };
     switch (type) {
@@ -68,13 +69,15 @@ function _getConverter(type: string) {
     return result;
 }
 
-
+/**
+ * Route class
+ * @private
+ */
 export class Route {
     rule: string;
     endpoint: string;
     methods: string[];
     weight: number;
-
 
     private _regex: RegExp;
     private _variable: string[];
@@ -83,14 +86,12 @@ export class Route {
         this.rule = rule;
         this.endpoint = endpoint;
 
-
         this.methods = methods.map(method => {
             return method.toUpperCase();
-        })
+        });
         if (methods.indexOf('HEAD') === -1 && methods.indexOf('GET') !== -1) {
             this.methods.push('HEAD');
         }
-
 
         this._variable = [];
         this.weight = 0;
@@ -105,7 +106,8 @@ export class Route {
 
         function _build_regex(rule: string) {
             for (let [converter, variable] of _parse_rule(rule)) {
-                if (converter === null) { // static part
+                if (converter === null) {
+                    // static part
                     regexParts.push(<string>variable);
                     self.weight += (<string>variable).length;
                 } else {
@@ -123,7 +125,7 @@ export class Route {
         self._regex = new RegExp(regex, 'g');
     }
 
-    match(url: string) {
+    match(url: string): null | Object {
         let result: any = {};
 
         this._regex.lastIndex = 0;
@@ -137,25 +139,3 @@ export class Route {
         return result;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

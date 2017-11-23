@@ -4,31 +4,55 @@ import { Request } from './request';
 import { Response } from './response';
 import { Sever } from './static';
 import { handleRouter } from './router';
-import { createRender } from './render';
-import { Configs, FlaskOptions, RunTimeOptions } from './configs';
+import { createRender, RenderFunction } from './render';
+import { Configs, FlaskOptions, ServerRunningOptions } from './configs';
 
+/**
+ * Global config instance
+ * @private
+ */
 export const configs = new Configs();
 
+/**
+ * Flask class
+ */
 export class Flask {
-    staticRex: RegExp;
-    render: Function;
+    /**
+     * If staticRex can match request url
+     *
+     * the request will be treated as a static file request
+     */
+    private staticRex: RegExp;
+    /**
+     * Render function
+     */
+    private render: RenderFunction;
 
+    /**
+     * Create Flask instance
+     * @param rootPath - app root path
+     * @param options - Flask options
+     */
     constructor(rootPath: string, options: FlaskOptions = {}) {
         configs.setConfigs(rootPath, options);
 
-        this.staticRex = new RegExp('^\/' + configs.flaskOptions.staticUrlPath + '\/');
+        this.staticRex = new RegExp(
+            '^/' + configs.flaskOptions.staticUrlPath + '/'
+        );
         this.render = createRender(configs);
     }
 
+    /**
+     * Create Flask server
+     */
     private createServer() {
-        let runTimeOptions = configs.runTimeOptions;
-        let staticServer = new Sever()
+        let runTimeOptions = configs.ServerRunningOptions;
+        let staticServer = new Sever();
 
         return createServer((request, response) => {
             response.setHeader('server', 'node/flask');
 
             if (request.method === 'OPTIONS') {
-                // TODO: 优化options请求
                 response.end();
             } else {
                 let req = new Request(request);
@@ -41,18 +65,30 @@ export class Flask {
             }
 
             if (runTimeOptions.debug)
-                console.log(`[${new Date()}] path: ${request.url} method: ${request.method}`);
+                console.log(
+                    `[${new Date()}] path: ${request.url} method: ${
+                        request.method
+                    }`
+                );
         });
     }
 
-    run(options?: RunTimeOptions) {
+    /**
+     * Run Flask app
+     * @param options
+     */
+    public run(options?: ServerRunningOptions) {
         options = options || {};
         configs.setRunTime(options);
-        let runTimeOptions = configs.runTimeOptions;
+        let runTimeOptions = configs.ServerRunningOptions;
 
         let server = this.createServer();
 
         server.listen(runTimeOptions.port, runTimeOptions.hostname);
-        console.log(`Server is run on http://${runTimeOptions.hostname}:${runTimeOptions.port}`);
+        console.log(
+            `Server is run on http://${runTimeOptions.hostname}:${
+                runTimeOptions.port
+            }`
+        );
     }
 }

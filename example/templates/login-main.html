@@ -1,8 +1,4 @@
-{% extends 'layout.html' %} 
-
-{% block title %}登录页面{% endblock %}
-
-{% block main %}
+{% extends 'layout.html' %} {% block title %}Login{% endblock %} {% block main %}
 <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
         aria-expanded="false" aria-label="Toggle navigation">
@@ -12,13 +8,15 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="/">图片预览 <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/">Photo View
+                    <span class="sr-only">(current)</span>
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/upload">上传页面</a>
+                <a class="nav-link" href="/upload">Upload</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="/login">登录页面</a>
+                <a class="nav-link" href="/login">Login</a>
             </li>
         </ul>
     </div>
@@ -29,7 +27,7 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
-        <strong>{{ message }}</strong> 请检查后输入.
+        <strong>{{ message }}.</strong> Please check again!
     </div>
     {% endif %}
 
@@ -37,21 +35,21 @@
         <div class="col-md-6 first">
             <form action="/login" method="post">
                 <div class="form-group">
-                    <label for="username">用户名</label>
+                    <label for="username">Username</label>
                     <input type="email" class="form-control" id="username" name="username">
                 </div>
                 <div class="form-group">
-                    <label for="password">密码</label>
+                    <label for="password">Password</label>
                     <input type="password" class="form-control" id="password" name="password">
                 </div>
-                <button type="submit" class="btn btn-primary">登录</button>
+                <button type="submit" class="btn btn-primary">Login</button>
             </form>
         </div>
         <div class="col-md-6">
-            <p class="title">代码：</p>
+            <p class="title">Code: </p>
             <pre>
                 <code class="typescript">
-// 定义请求的处理函数
+// Define the login handler
 const loginHandle = (req: Request, res: Response) => {
     const user = {
         username: 'admin@admin.com',
@@ -67,13 +65,13 @@ const loginHandle = (req: Request, res: Response) => {
             res.redirect('/');
         } else {
             res.render('login-main.html', {
-                message: '账户或密码错误'
+                message: 'Account or password error'
             });
         }
     }
 };
 
-// 绑定路由与请求函数
+// Bind login handle with router path `/login`
 router.add('/login', ['get', 'post'], loginHandle);
                 </code>
 

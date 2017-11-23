@@ -13,7 +13,7 @@
         "cover": "rimraf coverage && ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- test/*.ts --report lcovonly --compilers ts:ts-node/register",
         "report": "rimraf mochawesome-report && ./node_modules/.bin/mocha -r ./node_modules/ts-node/register ./test/*.ts --recursive --reporter mochawesome",
         "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-        "docs": "rm -rf docs & ./node_modules/.bin/typedoc --out docs/ src/flask.ts src/configs.ts src/router/index.ts src/request.ts src/response.ts --excludePrivate --excludeNotExported"
+        "docs": "rm -rf docs & ./node_modules/.bin/typedoc --readme none --theme minimal --out docs/ src --excludePrivate --excludeNotExported"
     },
     "repository": {
         "type": "git",
@@ -55,10 +55,5 @@
         "commitizen": {
             "path": "./node_modules/cz-conventional-changelog"
         }
-    },
-    "prettier": {
-        "prettier.ignorePath": ".prettierignore",
-        "prettier.singleQuote": true,
-        "prettier.tabWidth": 4
     }
 }

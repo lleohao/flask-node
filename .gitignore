@@ -5,6 +5,7 @@
 # Build folders
 lib/
 example/static/upload
+example/*.js
 
 # Other folders
 node_modules/
