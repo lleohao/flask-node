@@ -4,8 +4,5 @@
         "target": "es2016",
         "experimentalDecorators": true
     },
-    "include": [
-        "./node_modules/@types",
-        "./lib"
-    ]
+    "include": ["./node_modules/@types", "./lib"]
 }

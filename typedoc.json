@@ -1,0 +1,8 @@
+{
+    "out": "docs",
+    "exclude": ["test", "lib", "example", "node_modules"],
+    "target": "es6",
+    "module": "commonjs",
+    "excludePrivate": true,
+    "excludeNotExported": true
+}
