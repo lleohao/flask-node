@@ -109,7 +109,7 @@ Now you can visit `http://127.0.0.1:5050` in browsers.
 
    **A**: `| static` is a static pipe, it can load static resource.
 
-   ​
+   
 
 2. Create `login-main.html`
 
@@ -507,5 +507,4 @@ Now you can visit `http://127.0.0.1:5050` in browsers.
 
 ## Document
 
-* [API document]()
-* Example code
+* [API](https://lleohao.github.io/flask-node/)
