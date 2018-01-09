@@ -70,8 +70,8 @@ curl http://localhost:5051 // ==> Hello world
 
 ## Documentation
 
-* Quick start - a image upload web app.
-* API document
+* [Tutorial](https://github.com/lleohao/flask-node/tree/master/example)
+* [API](https://lleohao.github.io/flask-node/)
 
 
 
