@@ -1,3 +1,8 @@
+<a name="0.5.2"></a>
+## [0.5.2](https://github.com/lleobox/nodeServer/compare/v0.5.0...v0.5.2) (2018-01-09)
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/lleobox/nodeServer/compare/v0.4.3...v0.5.0) (2017-05-12)
 
@@ -44,4 +49,26 @@
 * add new example ([ffbe908](https://github.com/lleobox/nodeServer/commit/ffbe908))
 * add new static reques modul ([47b9031](https://github.com/lleobox/nodeServer/commit/47b9031))
 * add new static server ([168cdc9](https://github.com/lleobox/nodeServer/commit/168cdc9))
+
+
+
+<a name="0.4.1"></a>
+## [0.4.1](https://github.com/lleobox/nodeServer/compare/v0.4.0...v0.4.1) (2016-09-09)
+
+
+
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/lleobox/nodeServer/compare/v0.3.0...v0.4.0) (2016-09-06)
+
+
+
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/lleobox/nodeServer/compare/v0.2.0...v0.3.0) (2016-08-22)
+
+
+
+<a name="0.2.0"></a>
+# 0.2.0 (2016-08-13)
+
+
 
