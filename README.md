@@ -1,5 +1,7 @@
 # Flask-node
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/lleohao/flask-node.svg)](https://greenkeeper.io/)
+
 > Similar to python Flask web-framework
 
 
